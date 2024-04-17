@@ -1,20 +1,20 @@
 ﻿version: '3'
 
 services:
-  # lsp_api:
-  #   image: lsp_api
-  #   container_name: lsp_api
-  #   build:
-  #     context: .
-  #     dockerfile: LSP.API/Dockerfile
-  #   ports:
-  #     - "5000:5000"
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_URLS=http://+:5000
-  #     - SecurityBlockControl=true
-  #   depends_on:
-  #     - lsp_db
+  lsp_api:
+    image: lsp_api
+    container_name: lsp_api
+    build:
+      context: .
+      dockerfile: LSP.API/Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5000
+      - SecurityBlockControl=true
+    depends_on:
+      - lsp_db
 
   lsp_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -22,7 +22,7 @@ services:
     ports:
       - "1433:1433"
     environment:
-      SA_PASSWORD: lspteam1907?
+      SA_PASSWORD: lspteam1708?
       ACCEPT_EULA: "Y"
       MSSQL_PID: Developer
       MSSQL_COLLATION: Turkish_CS_AS
