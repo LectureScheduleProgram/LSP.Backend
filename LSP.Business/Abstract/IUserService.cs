@@ -2,7 +2,6 @@
 using LSP.Core.Result;
 using System.Linq.Expressions;
 using LSP.Entity.DTO.User;
-using LSP.Entity.DTO.Parity;
 
 namespace LSP.Business.Abstract
 {
@@ -16,7 +15,5 @@ namespace LSP.Business.Abstract
         ServiceResult<bool> Add(User user);
         ServiceResult<User> Get(Expression<Func<User, bool>> filter);
         ServiceResult<User> GetByMail(string email);
-
-
     }
 }

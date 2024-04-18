@@ -26,11 +26,19 @@ namespace LSP.Dal.Concrete.Context
         }
 
         // User
-        public DbSet<User>? Users { get; set; }
-        public DbSet<UserSecurityType>? UserSecurityTypes { get; set; }
-        public DbSet<PasswordHistory>? PasswordHistories { get; set; }
-        public DbSet<SecurityHistory>? SecurityHistories { get; set; }
-        public DbSet<UserStatusHistory>? UserStatusHistories { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserSecurityType> UserSecurityTypes { get; set; }
+        public DbSet<PasswordHistory> PasswordHistories { get; set; }
+        public DbSet<SecurityHistory> SecurityHistories { get; set; }
+        public DbSet<UserStatusHistory> UserStatusHistories { get; set; }
 
+        // Classroom
+        public DbSet<Classroom> Classrooms { get; set; }
+
+        // Lecture
+        public DbSet<Lecture> Lectures { get; set; }
+
+        // ScheduleRecord
+        public DbSet<ScheduleRecord> ScheduleRecords { get; set; }
     }
 }

@@ -569,5 +569,10 @@ namespace LSP.Business.Constants
 
         public const string invalid_order_type = "Invalid Order Type!";
         public const string invalid_order_type_code = "invalid_order_type";
+
+
+        public const string lecture_not_found = "lecture_not_found";
+        public const string classroom_not_found = "classroom_not_found";
+        public const string scheduleRecord_not_found = "scheduleRecord_not_found";
     }
 }

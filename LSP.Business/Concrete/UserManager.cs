@@ -6,15 +6,13 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using LSP.Entity.DTO.User;
 using System.Net;
-using PhoneNumbers;
-using System.Diagnostics.Metrics;
 using LSP.Core.Security;
 
 namespace LSP.Business.Concrete
 {
     public class UserManager : IUserService
     {
-        private IUserDal _usersDal;
+        private readonly IUserDal _usersDal;
 
         public UserManager(IUserDal usersDal)
         {
