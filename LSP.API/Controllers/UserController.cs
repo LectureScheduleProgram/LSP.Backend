@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using LSP.Business.Abstract;
 using LSP.Core.Result;
-using LSP.Entity.DTO.Balance;
-using LSP.Entity.DTO.Currency;
 using LSP.Entity.DTO.User;
 
 namespace LSP.API.Controllers
