@@ -27,12 +27,11 @@ namespace LSP.Business.Concrete
         private readonly ISecurityHistoryService _securityHistoriesService;
         private readonly IMailService _mailService;
         private readonly IAccessControlService _accessControlService;
-        private readonly IBalanceService _balanceService;
 
         public AuthManager(IUserService usersService, ITokenHelper tokenHelper,
             IUserSecurityTypeService securityTypesService,
             IPasswordHistoryService passwordHistoriesService,
-            ISecurityHistoryService securityHistoriesService, IMailService mailService, IAccessControlService accessControlService, IBalanceService balanceService)
+            ISecurityHistoryService securityHistoriesService, IMailService mailService, IAccessControlService accessControlService)
         {
             _tokenHelper = tokenHelper;
             _securityTypesService = securityTypesService;
@@ -41,7 +40,6 @@ namespace LSP.Business.Concrete
             _mailService = mailService;
             _usersService = usersService;
             _accessControlService = accessControlService;
-            _balanceService = balanceService;
         }
 
         [ValidationAspect(typeof(RegisterValidator))]
@@ -80,16 +78,6 @@ namespace LSP.Business.Concrete
                 SecurityCode = AuthHelper.RandomString(15),
             };
             _usersService.Add(user);
-
-            var balanceResult = _balanceService.CreateBalanciesAndFutureBalancies(user.Id);
-            if (!balanceResult.Success)
-            {
-                return new ServiceResult<SecurityResponseDto>
-                {
-                    HttpStatusCode = (short)HttpStatusCode.InternalServerError,
-                    Result = new ErrorDataResult<SecurityResponseDto>(null, Messages.balancies_cannot_created, Messages.balancies_cannot_created_code)
-                };
-            }
 
             #region Security Types
             UserSecurityType userSecurityType = new()

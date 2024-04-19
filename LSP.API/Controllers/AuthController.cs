@@ -44,25 +44,25 @@ namespace LSP.Api.Controllers
 			return StatusCode(result.HttpStatusCode, result.Result);
 		}
 
-		[SwaggerOperation(Summary = "Send Email Code", Description = "Send Email API, Type represents email template.")]
-		[ProducesResponseType(typeof(SuccessDataResult<SecurityCodeResponseDto>), (int)HttpStatusCode.OK)]
-		[HttpPost]
-		[Route("sendEmailCode")]
-		public IActionResult SendEmailCode(MfaCodeDto dto)
-		{
-			var result = _authService.SendEmailCode(dto);
-			return StatusCode(result.HttpStatusCode, result.Result);
-		}
+		// [SwaggerOperation(Summary = "Send Email Code", Description = "Send Email API, Type represents email template.")]
+		// [ProducesResponseType(typeof(SuccessDataResult<SecurityCodeResponseDto>), (int)HttpStatusCode.OK)]
+		// [HttpPost]
+		// [Route("sendEmailCode")]
+		// public IActionResult SendEmailCode(MfaCodeDto dto)
+		// {
+		// 	var result = _authService.SendEmailCode(dto);
+		// 	return StatusCode(result.HttpStatusCode, result.Result);
+		// }
 
-		[SwaggerOperation(Summary = "Checking Security Codes To Getting Token.", Description = "SecuritySystems.Status; 0: Passive, 1: Active")]
-		[ProducesResponseType(typeof(SuccessDataResult<AccessToken>), (int)HttpStatusCode.OK)]
-		[HttpPost]
-		[Route("checkSecuritiesCode")]
-		public IActionResult CheckSecurityCodes(SecurityWithUserControlRequestDto dto)
-		{
-			var result = _authService.CheckSecuritiesCode(dto);
-			return StatusCode(result.HttpStatusCode, result.Result);
-		}
+		// [SwaggerOperation(Summary = "Checking Security Codes To Getting Token.", Description = "SecuritySystems.Status; 0: Passive, 1: Active")]
+		// [ProducesResponseType(typeof(SuccessDataResult<AccessToken>), (int)HttpStatusCode.OK)]
+		// [HttpPost]
+		// [Route("checkSecuritiesCode")]
+		// public IActionResult CheckSecurityCodes(SecurityWithUserControlRequestDto dto)
+		// {
+		// 	var result = _authService.CheckSecuritiesCode(dto);
+		// 	return StatusCode(result.HttpStatusCode, result.Result);
+		// }
 
 		[Authorize]
 		[SwaggerOperation(Summary = "Password Resetting", Description = "With help of security codes reset the password of user!")]
