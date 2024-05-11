@@ -16,6 +16,6 @@ namespace LSP.Business.Abstract
         ServiceResult<Classroom> Get(Expression<Func<Classroom, bool>> filter);
         #endregion
 
-        ServiceResult<GetAvailableClassroomListResponseDto> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request);
+        ServiceResult<List<GetAvailableClassroomListResponseDto>> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request);
     }
 }

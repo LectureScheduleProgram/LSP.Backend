@@ -148,7 +148,7 @@ namespace LSP.Business.Concrete
         }
         #endregion
 
-        public ServiceResult<GetAvailableClassroomListResponseDto> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request)
+        public ServiceResult<List<GetAvailableClassroomListResponseDto>> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request)
         {
             throw new NotImplementedException();
         }
