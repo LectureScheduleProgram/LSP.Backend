@@ -13,7 +13,7 @@ using LSP.Entity.DTO.Authentication;
 namespace LSP.Api.Controllers
 {
 	[SwaggerTag("Authentication Controller")]
-	[Route("api/[controller]")]
+	[Route("api/auth")]
 	[ApiController]
 	public class AuthController : ControllerBase
 	{

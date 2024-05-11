@@ -7,7 +7,8 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace LSP.Api.Controllers;
 
 [SwaggerTag("ExampleController")]
-[Route("api/[controller]")]
+// [Route("api/[controller]")]
+[Route("api/example")]
 [ApiController]
 public class ExampleController : ControllerBase
 {

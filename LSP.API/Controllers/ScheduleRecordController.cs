@@ -9,8 +9,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace LSP.API.Controllers
 {
-    [SwaggerTag("[controller]")]
-    [Route("api/[controller]")]
+    [SwaggerTag("Schedule Record Controller")]
+    [Route("api/scheduleRecord")]
     [ApiController]
     [Authorize]
     public class ScheduleRecordController : ControllerBase

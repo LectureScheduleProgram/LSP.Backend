@@ -5,22 +5,21 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
-using LSP.Entity.DTO.Lecture;
 
 namespace LSP.Business.Concrete
 {
-    public class ClassroomManager : IClassroomService
+    public class ClassroomTypeManager : IClassroomTypeService
     {
-        private readonly IClassroomDal _classroomsDal;
+        private readonly IClassroomTypeDal _ClassroomTypeDal;
 
-        public ClassroomManager(IClassroomDal ClassroomsDal)
+        public ClassroomTypeManager(IClassroomTypeDal ClassroomTypeDal)
         {
-            _classroomsDal = ClassroomsDal;
+            _ClassroomTypeDal = ClassroomTypeDal;
         }
-        #region CRUD
-        public ServiceResult<bool> Add(Classroom Classroom)
+
+        public ServiceResult<bool> Add(ClassroomType ClassroomType)
         {
-            _classroomsDal.Add(Classroom);
+            _ClassroomTypeDal.Add(ClassroomType);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -30,21 +29,21 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public ServiceResult<bool> Update(Classroom Classroom)
+        public ServiceResult<bool> Update(ClassroomType ClassroomType)
         {
-            var getClassroom = _classroomsDal.Get(x => x.Id == Classroom.Id);
-            if (getClassroom is null)
+            var getClassroomType = _ClassroomTypeDal.Get(x => x.Id == ClassroomType.Id);
+            if (getClassroomType is null)
             {
                 return new ServiceResult<bool>
                 {
                     HttpStatusCode = (short)HttpStatusCode.NotFound,
                     Result = new ErrorDataResult<bool>(false,
-                        Messages.classroom_not_found,
-                        Messages.classroom_not_found)
+                        Messages.classroomType_not_found,
+                        Messages.classroomType_not_found)
                 };
             }
 
-            _classroomsDal.Update(Classroom);
+            _ClassroomTypeDal.Update(ClassroomType);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -56,19 +55,19 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<bool> Delete(int id)
         {
-            var Classroom = _classroomsDal.Get(x => x.Id == id);
-            if (Classroom is null)
+            var ClassroomType = _ClassroomTypeDal.Get(x => x.Id == id);
+            if (ClassroomType is null)
             {
                 return new ServiceResult<bool>
                 {
                     HttpStatusCode = (short)HttpStatusCode.NotFound,
                     Result = new ErrorDataResult<bool>(false,
-                        Messages.classroom_not_found,
-                        Messages.classroom_not_found)
+                        Messages.classroomType_not_found,
+                        Messages.classroomType_not_found)
                 };
             }
 
-            _classroomsDal.Delete(Classroom);
+            _ClassroomTypeDal.Delete(ClassroomType);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -78,79 +77,73 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public ServiceResult<Classroom> Get(Expression<Func<Classroom, bool>> filter)
+        public ServiceResult<ClassroomType> Get(Expression<Func<ClassroomType, bool>> filter)
         {
-            var result = _classroomsDal.Get(filter);
+            var result = _ClassroomTypeDal.Get(filter);
             if (result is not null)
             {
-                return new ServiceResult<Classroom>
+                return new ServiceResult<ClassroomType>
                 {
                     HttpStatusCode = (short)HttpStatusCode.OK,
-                    Result = new SuccessDataResult<Classroom>(result,
+                    Result = new SuccessDataResult<ClassroomType>(result,
                         Messages.success,
                         Messages.success_code)
                 };
             }
 
-            return new ServiceResult<Classroom>
+            return new ServiceResult<ClassroomType>
             {
                 HttpStatusCode = (short)HttpStatusCode.NotFound,
-                Result = new ErrorDataResult<Classroom>(null,
-                    Messages.classroom_not_found,
-                    Messages.classroom_not_found)
+                Result = new ErrorDataResult<ClassroomType>(null,
+                    Messages.classroomType_not_found,
+                    Messages.classroomType_not_found)
             };
         }
 
-        public ServiceResult<Classroom> GetById(int id)
+        public ServiceResult<ClassroomType> GetById(int id)
         {
-            var Classroom = _classroomsDal.Get(x => x.Id == id);
-            if (Classroom is not null)
+            var ClassroomType = _ClassroomTypeDal.Get(x => x.Id == id);
+            if (ClassroomType is not null)
             {
-                return new ServiceResult<Classroom>
+                return new ServiceResult<ClassroomType>
                 {
                     HttpStatusCode = (short)HttpStatusCode.OK,
-                    Result = new SuccessDataResult<Classroom>(Classroom,
+                    Result = new SuccessDataResult<ClassroomType>(ClassroomType,
                         Messages.success,
                         Messages.success_code)
                 };
             }
 
-            return new ServiceResult<Classroom>
+            return new ServiceResult<ClassroomType>
             {
                 HttpStatusCode = (short)HttpStatusCode.NotFound,
-                Result = new ErrorDataResult<Classroom>(new Classroom(),
-                    Messages.classroom_not_found,
-                    Messages.classroom_not_found)
+                Result = new ErrorDataResult<ClassroomType>(new ClassroomType(),
+                    Messages.classroomType_not_found,
+                    Messages.classroomType_not_found)
             };
         }
 
-        public ServiceResult<List<Classroom>> GetList()
+        public ServiceResult<List<ClassroomType>> GetList()
         {
-            var Classrooms = _classroomsDal.GetList();
-            if (Classrooms is not null)
+            var ClassroomTypes = _ClassroomTypeDal.GetList();
+            if (ClassroomTypes is not null)
             {
-                return new ServiceResult<List<Classroom>>
+                return new ServiceResult<List<ClassroomType>>
                 {
                     HttpStatusCode = (short)HttpStatusCode.OK,
-                    Result = new SuccessDataResult<List<Classroom>>(Classrooms.ToList(),
+                    Result = new SuccessDataResult<List<ClassroomType>>(ClassroomTypes.ToList(),
                         Messages.success,
                         Messages.success_code)
                 };
             }
 
-            return new ServiceResult<List<Classroom>>
+            return new ServiceResult<List<ClassroomType>>
             {
                 HttpStatusCode = (short)HttpStatusCode.NotFound,
-                Result = new ErrorDataResult<List<Classroom>>(new List<Classroom>(),
-                    Messages.classroom_not_found,
-                    Messages.classroom_not_found)
+                Result = new ErrorDataResult<List<ClassroomType>>(new List<ClassroomType>(),
+                    Messages.classroomType_not_found,
+                    Messages.classroomType_not_found)
             };
-        }
-        #endregion
-
-        public ServiceResult<GetAvailableClassroomListResponseDto> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request)
-        {
-            throw new NotImplementedException();
         }
     }
 }

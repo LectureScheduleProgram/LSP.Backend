@@ -6,11 +6,12 @@ using LSP.Business.Abstract;
 using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
+using LSP.Entity.DTO.Lecture;
 
 namespace LSP.API.Controllers
 {
-    [SwaggerTag("[controller]")]
-    [Route("api/[controller]")]
+    [SwaggerTag("Classroom Controller")]
+    [Route("api/classroom")]
     [ApiController]
     [Authorize]
     public class ClassroomController : ControllerBase
@@ -66,6 +67,16 @@ namespace LSP.API.Controllers
         public IActionResult GetList()
         {
             var result = _classroomService.GetList();
+            return StatusCode(result.HttpStatusCode, result.Result);
+        }
+
+        [SwaggerOperation(Summary = "Get Available List of Classroom", Description = "It gets the available list of Classroom")]
+        [ProducesResponseType(typeof(SuccessDataResult<GetAvailableClassroomListResponseDto>), (int)HttpStatusCode.OK)]
+        [HttpGet]
+        [Route("availableClassroomList")]
+        public IActionResult GetAvailableClassroomList([FromQuery] GetAvailableClassroomListRequestDto request)
+        {
+            var result = _classroomService.GetAvailableClassroomList(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
     }

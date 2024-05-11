@@ -8,7 +8,7 @@ using LSP.Entity.DTO.User;
 
 namespace LSP.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     [Authorize]
     public class UserController : ControllerBase

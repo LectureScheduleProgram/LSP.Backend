@@ -34,6 +34,8 @@ namespace LSP.Dal.Concrete.Context
 
         // Classroom
         public DbSet<Classroom> Classrooms { get; set; }
+        public DbSet<ClassroomType> ClassroomTypes { get; set; }
+        public DbSet<ClassroomCapacity> ClassroomCapacities { get; set; }
 
         // Lecture
         public DbSet<Lecture> Lectures { get; set; }

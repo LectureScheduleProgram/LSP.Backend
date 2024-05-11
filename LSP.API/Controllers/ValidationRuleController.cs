@@ -7,7 +7,7 @@ using LSP.Entity.DTO.ValidationRule;
 
 namespace LSP.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/validation")]
     [ApiController]
     public class ValidationRuleController : ControllerBase
     {
