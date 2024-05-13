@@ -8,6 +8,7 @@ namespace LSP.Business.Abstract
     public interface IAuthService
     {
         ServiceResult<SecurityResponseDto> Register(RegisterDto registerDto);
+        ServiceResult<AccessToken> RegisterWithoutMfa(RegisterDto registerDto);
         ServiceResult<SecurityResponseDto> Login(LoginDto loginDto);
         ServiceResult<AccessToken> LoginWithoutMfa(LoginDto loginDto);
         ServiceResult<AccessToken> CheckSecuritiesCode(SecurityWithUserControlRequestDto dto);

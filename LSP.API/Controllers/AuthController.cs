@@ -25,12 +25,12 @@ namespace LSP.Api.Controllers
 		}
 
 		[SwaggerOperation(Summary = "Register to LectureSchedule ", Description = "Register API")]
-		[ProducesResponseType(typeof(SuccessDataResult<SecurityResponseDto>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(typeof(SuccessDataResult</*SecurityResponseDto*/AccessToken>), (int)HttpStatusCode.OK)]
 		[HttpPost]
 		[Route("register")]
 		public IActionResult Register(RegisterDto userRegisterDto)
 		{
-			var result = _authService.Register(userRegisterDto);
+			var result = _authService.RegisterWithoutMfa(userRegisterDto);
 			return StatusCode(result.HttpStatusCode, result.Result);
 		}
 

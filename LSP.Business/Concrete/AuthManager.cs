@@ -9,7 +9,6 @@ using LSP.Core.Entities.Concrete;
 using LSP.Core.Extensions;
 using LSP.Core.Result;
 using LSP.Core.Security;
-using LSP.Dal.Concrete.Context;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO;
 using LSP.Entity.DTO.Authentication;
@@ -128,6 +127,61 @@ namespace LSP.Business.Concrete
             };
         }
 
+        [ValidationAspect(typeof(RegisterValidator))]
+        public ServiceResult<AccessToken> RegisterWithoutMfa(RegisterDto registerDto)
+        {
+            var userResult = _usersService.GetByMail(registerDto.Email);
+            if (userResult.Result.Success)
+                return new ServiceResult<AccessToken>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.Forbidden,
+                    Result = new ErrorDataResult<AccessToken>(null,
+                        Messages.already_mail_registered,
+                        Messages.already_mail_registered_code)
+                };
+
+            HashingHelper.CreatePasswordHash(registerDto.Password, out var passwordSalt, out var passwordHash);
+
+            if (registerDto.Password.Contains(AuthHelper.PlainMail(registerDto.Email)))
+                return new ServiceResult<AccessToken>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<AccessToken>(null,
+                        Messages.password_cant_contain_email,
+                        Messages.password_cant_contain_email_code)
+                };
+
+            var user = new User
+            {
+                Name = string.Empty,
+                Surname = string.Empty,
+                Email = registerDto.Email,
+                CreatedDate = DateTime.Now,
+                Status = 1,
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash,
+            };
+            _usersService.Add(user);
+
+            PasswordHistory passwordHistory = new()
+            {
+                CreatedDate = DateTime.Now,
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash,
+                UserId = user.Id
+            };
+            _passwordHistoriesService.Add(passwordHistory);
+
+            var result = _tokenHelper.CreateJwtToken(user);
+
+            return new ServiceResult<AccessToken>
+            {
+                HttpStatusCode = (short)HttpStatusCode.OK,
+                Result = new SuccessDataResult<AccessToken>(result,
+                    Messages.success,
+                    Messages.success_code)
+            };
+        }
 
         [ValidationAspect(typeof(LoginValidator))]
         public ServiceResult<SecurityResponseDto> Login(LoginDto loginDto)
@@ -189,6 +243,48 @@ namespace LSP.Business.Concrete
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
                 Result = new SuccessDataResult<SecurityResponseDto>(getUserSecurityTypes.Data, Messages.success,
+                    Messages.success_code)
+            };
+        }
+
+        [ValidationAspect(typeof(LoginValidator))]
+        public ServiceResult<AccessToken> LoginWithoutMfa(LoginDto loginDto)
+        {
+            var userToCheck = _usersService.Get(x => x.Email == loginDto.Email && x.Status != 0);
+
+            if (!userToCheck.Result.Success)
+            {
+                return new ServiceResult<AccessToken>()
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<AccessToken>(null,
+                        Messages.user_not_found,
+                        Messages.user_not_found_code)
+                };
+            }
+
+            if (!HashingHelper.VerifyPasswordHash(loginDto.Password, userToCheck.Result.Data!.PasswordSalt!,
+                    userToCheck.Result.Data.PasswordHash!))
+                return new ServiceResult<AccessToken>()
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<AccessToken>(null,
+                        Messages.wrong_password,
+                        Messages.wrong_password_code)
+                };
+
+            userToCheck.Result.Data.SecurityCode = AuthHelper.RandomString(15);
+            _usersService.Update(userToCheck.Result.Data);
+
+            var result = _tokenHelper.CreateJwtToken(userToCheck.Result.Data);
+
+            userToCheck.Result.Data.SecurityCode = string.Empty;
+            _usersService.Update(userToCheck.Result.Data);
+
+            return new ServiceResult<AccessToken>()
+            {
+                HttpStatusCode = (short)HttpStatusCode.OK,
+                Result = new SuccessDataResult<AccessToken>(result, Messages.success,
                     Messages.success_code)
             };
         }
@@ -338,7 +434,6 @@ namespace LSP.Business.Concrete
                     Messages.success_code)
             };
         }
-
         public ServiceResult<SecurityResponseDto> PasswordResetRequest()
         {
             var userId = UserIdentityHelper.GetUserId();
@@ -525,7 +620,6 @@ namespace LSP.Business.Concrete
             };
         }
 
-
         [ValidationAspect(typeof(ForgetPasswordRequestValidator))]
         public ServiceResult<bool> ForgetPassword(ForgetPasswordRequestDto pr)
         {
@@ -630,7 +724,6 @@ namespace LSP.Business.Concrete
                 Result = new SuccessDataResult<bool>(true, Messages.success, Messages.success_code)
             };
         }
-
         public ServiceResult<ForgetPasswordResponseDto> ForgetPasswordRequest(string email)
         {
             var checkUser = _usersService.Get(x => x.Email == email).Result.Data;
