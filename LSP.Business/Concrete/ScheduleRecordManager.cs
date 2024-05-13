@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
+using LSP.Entity.DTO.ScheduleRecord;
+using LSP.Entity.Enum.ScheduleRecord;
 
 namespace LSP.Business.Concrete
 {
@@ -16,16 +18,9 @@ namespace LSP.Business.Concrete
         {
             _scheduleRecordDal = scheduleRecordDal;
         }
-        public ServiceResult<bool> Add(ScheduleRecord ScheduleRecord)
+        public ServiceResult<bool> Add(AddScheduleRecordDto request)
         {
-            _scheduleRecordDal.Add(ScheduleRecord);
-            return new ServiceResult<bool>
-            {
-                HttpStatusCode = (short)HttpStatusCode.OK,
-                Result = new SuccessDataResult<bool>(true,
-                    Messages.success,
-                    Messages.success_code)
-            };
+            return null;
         }
 
         public ServiceResult<bool> Update(ScheduleRecord ScheduleRecord)
@@ -143,6 +138,11 @@ namespace LSP.Business.Concrete
                     Messages.scheduleRecord_not_found,
                     Messages.scheduleRecord_not_found)
             };
+        }
+
+        public ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status)
+        {
+            throw new NotImplementedException();
         }
     }
 }

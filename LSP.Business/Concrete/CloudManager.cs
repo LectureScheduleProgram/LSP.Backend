@@ -2,12 +2,7 @@
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using LSP.Business.Abstract;
 using LSP.Business.Constants;
 using LSP.Core.Result;
@@ -17,7 +12,7 @@ namespace LSP.Business.Concrete
     public class CloudManager : ICloudService
     {
         private readonly IConfiguration _configuration;
-        private IAmazonS3 _s3Client;
+        private readonly IAmazonS3 _s3Client;
 
         public CloudManager(IConfiguration configuration, IAmazonS3 s3Client)
         {

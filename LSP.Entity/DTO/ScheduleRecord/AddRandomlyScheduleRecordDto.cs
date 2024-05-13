@@ -1,9 +1,9 @@
 using System.ComponentModel;
 using LSP.Core.Entities;
 
-namespace LSP.Entity.DTO.Lecture
+namespace LSP.Entity.DTO.ScheduleRecord
 {
-    public class GetAvailableClassroomListRequestDto : IDto
+    public class AddRandomlyScheduleRecordDto : IDto
     {
         [DefaultValue(1)]
         public required byte ClassroomTypeId { get; set; }

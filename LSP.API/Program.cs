@@ -11,7 +11,6 @@ using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using LSP.API.Extensions;
 using LSP.Business.Constants;
 using LSP.Business.DependencyResolvers.Autofac;
@@ -21,6 +20,7 @@ using LSP.Core.Middlewares;
 using LSP.Core.Result;
 using LSP.Core.Security;
 using LSP.Entity.DTO.Configuration;
+using LSP.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,8 +57,8 @@ builder.Services.AddCors(options =>
 	options.AddPolicy(name: "LSPSpecificOrigins",
 		policy =>
 		{
-			policy.WithOrigins("https://LectureSchedule.com",
-				"http://LectureSchedule.com", "http://localhost:3000");
+			policy.WithOrigins("https://lectureschedule.com",
+				"http://lectureschedule.com", "http://localhost:3000");
 			policy.AllowCredentials();
 			policy.WithHeaders("Authorization", "LectureSchedule-Language", "Content-Type");
 			policy.WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
@@ -67,7 +67,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
-	opts.JsonSerializerOptions.IgnoreNullValues = true;
+	opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 	opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
@@ -171,6 +171,9 @@ builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
+new ApplicationInitializer().Initialize(app);
+
+// TODO: Refactor here like E-Commerce Project
 UserIdentityHelper.SetHttpContextAccessor(app.Services.GetRequiredService<IHttpContextAccessor>());
 
 if (app.Environment.IsDevelopment())

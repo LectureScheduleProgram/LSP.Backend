@@ -82,7 +82,7 @@ namespace LSP.Core.EntityFramework
             {
                 var x = component.ToString().Split("."); //split for adding trim and lower method
                 x[1] = x[1].Insert(x[1].Length, ".Trim().ToLower()"); //trim and lower are added as string
-                expressions.Add((Expression)DynamicExpressionParser.ParseLambda(new[] { parameter }, null, string.Join(".", x)).Body); //string expression are converted to expression
+                expressions.Add(DynamicExpressionParser.ParseLambda(new[] { parameter }, null, string.Join(".", x)).Body); //string expression are converted to expression
             }
             var body = expressions.Skip(1).Aggregate(expressions[0], Expression.OrElse);
             return Expression.Lambda<Func<TEntity, bool>>(body, new ParameterExpression[] { parameter });

@@ -1,6 +1,6 @@
 namespace LSP.Entity.Enum.ScheduleRecord
 {
-    public enum DayEnum
+    public enum DaysEnum
     {
         Monday,
         Tuesday,

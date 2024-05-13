@@ -11,8 +11,9 @@ namespace LSP.Entity.Concrete
         public short ClassroomId { get; set; }
         // public Lecture Lecture { get; set; }
         public short LectureId { get; set; }
-        public DayEnum Day { get; set; }
+        public DaysEnum Day { get; set; }
         public TimeSpan StartingTime { get; set; }
         public TimeSpan EndingTime { get; set; }
+        public ScheduleRecordStatusEnum Status { get; set; }
     }
 }
