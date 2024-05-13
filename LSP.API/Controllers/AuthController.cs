@@ -35,12 +35,12 @@ namespace LSP.Api.Controllers
 		}
 
 		[SwaggerOperation(Summary = "Login to LectureSchedule ", Description = "Login API")]
-		[ProducesResponseType(typeof(SuccessDataResult<SecurityResponseDto>), (int)HttpStatusCode.OK)]
+		[ProducesResponseType(typeof(SuccessDataResult</*SecurityResponseDto*/AccessToken>), (int)HttpStatusCode.OK)]
 		[HttpPost]
 		[Route("login")]
 		public IActionResult Login(LoginDto loginDto)
 		{
-			var result = _authService.Login(loginDto);
+			var result = _authService.LoginWithoutMfa(loginDto);
 			return StatusCode(result.HttpStatusCode, result.Result);
 		}
 

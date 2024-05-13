@@ -9,6 +9,7 @@ namespace LSP.Business.Abstract
     {
         ServiceResult<SecurityResponseDto> Register(RegisterDto registerDto);
         ServiceResult<SecurityResponseDto> Login(LoginDto loginDto);
+        ServiceResult<AccessToken> LoginWithoutMfa(LoginDto loginDto);
         ServiceResult<AccessToken> CheckSecuritiesCode(SecurityWithUserControlRequestDto dto);
         ServiceResult<SecurityResponseDto> PasswordResetRequest();
         ServiceResult<bool> PasswordReset(PasswordResetDto passwordReset);

@@ -6,12 +6,10 @@ namespace LSP.Entity.DTO
 {
     public class LoginDto : IDto
     {
-        [Required]
         [DefaultValue("example@mail.com")]
-        public string Email { get; set; }
+        public required string Email { get; set; }
 
-        [Required]
         [DefaultValue("Password123?")]
-        public string Password { get; set; }
+        public required string Password { get; set; }
     }
 }

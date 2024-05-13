@@ -10,7 +10,6 @@ namespace LSP.Business.ValidationRules.FluentValidation.AuthValidators
         {
             RuleFor(p => p.Email).NotEmpty().EmailAddress().WithMessage(AspectMessages.InvalidEmail);
             RuleFor(p => p.Password).NotEmpty();
-
         }
     }
 }
