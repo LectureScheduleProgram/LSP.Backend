@@ -71,14 +71,14 @@ namespace LSP.API.Controllers
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
-        [SwaggerOperation(Summary = "Get List of ScheduleRecord By Status", Description = "It gets the list of ScheduleRecord by status.")]
-        [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
-        [HttpGet]
-        [Route("status/{status}")]
-        public IActionResult GetListByStatus([Required][FromRoute] ScheduleRecordStatusEnum status)
-        {
-            var result = _scheduleRecordService.GetListByStatus(status);
-            return StatusCode(result.HttpStatusCode, result.Result);
-        }
+        // [SwaggerOperation(Summary = "Get List of ScheduleRecord By Status", Description = "It gets the list of ScheduleRecord by status.")]
+        // [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
+        // [HttpGet]
+        // [Route("status/{status}")]
+        // public IActionResult GetListByStatus([Required][FromRoute] ScheduleRecordStatusEnum status)
+        // {
+        //     var result = _scheduleRecordService.GetListByStatus(status);
+        //     return StatusCode(result.HttpStatusCode, result.Result);
+        // }
     }
 }

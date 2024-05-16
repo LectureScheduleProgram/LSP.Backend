@@ -576,5 +576,6 @@ namespace LSP.Business.Constants
         public const string scheduleRecord_not_found = "scheduleRecord_not_found";
         public const string classroomType_not_found = "classroomType_not_found";
         public const string classroomCapacity_not_found = "classroomCapacity_not_found";
+        public const string scheduleRecord_already_exists = "scheduleRecord_already_exists";
     }
 }

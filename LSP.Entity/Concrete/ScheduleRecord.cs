@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using LSP.Core;
 using LSP.Entity.Abstract.Common;
 using LSP.Entity.Enum.ScheduleRecord;
@@ -12,8 +13,9 @@ namespace LSP.Entity.Concrete
         // public Lecture Lecture { get; set; }
         public short LectureId { get; set; }
         public DaysEnum Day { get; set; }
-        public TimeSpan StartingTime { get; set; }
-        public TimeSpan EndingTime { get; set; }
-        public ScheduleRecordStatusEnum Status { get; set; }
+        [Range(1, 24)]
+        public byte StartHour { get; set; }
+        [Range(1, 24)]
+        public byte EndHour { get; set; }
     }
 }

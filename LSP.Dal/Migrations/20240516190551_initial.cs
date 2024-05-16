@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace LSP.Dal.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -96,9 +96,8 @@ namespace LSP.Dal.Migrations
                     ClassroomId = table.Column<short>(type: "smallint", nullable: false),
                     LectureId = table.Column<short>(type: "smallint", nullable: false),
                     Day = table.Column<int>(type: "int", nullable: false),
-                    StartingTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndingTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    StartHour = table.Column<byte>(type: "tinyint", nullable: false),
+                    EndHour = table.Column<byte>(type: "tinyint", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },

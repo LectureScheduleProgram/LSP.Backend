@@ -6,7 +6,6 @@ using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.ScheduleRecord;
-using LSP.Entity.Enum.ScheduleRecord;
 
 namespace LSP.Business.Concrete
 {
@@ -20,7 +19,43 @@ namespace LSP.Business.Concrete
         }
         public ServiceResult<bool> Add(AddScheduleRecordDto request)
         {
-            return null;
+            var scheduleRecord = _scheduleRecordDal.Get(sr =>
+            sr.ClassroomId == request.ClassroomId
+            && sr.Day == request.Day &&
+            (
+                (sr.StartHour == request.StartHour && sr.EndHour == request.EndHour) ||
+                (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour) ||
+                (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
+                (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
+                (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour)
+            ));
+
+            if (scheduleRecord is not null)
+            {
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                        Messages.scheduleRecord_already_exists,
+                        Messages.scheduleRecord_already_exists)
+                };
+            }
+
+            _scheduleRecordDal.Add(new ScheduleRecord
+            {
+                ClassroomId = request.ClassroomId,
+                Day = request.Day,
+                StartHour = request.StartHour,
+                EndHour = request.EndHour
+            });
+
+            return new ServiceResult<bool>
+            {
+                HttpStatusCode = (short)HttpStatusCode.OK,
+                Result = new SuccessDataResult<bool>(true,
+                    Messages.success,
+                    Messages.success_code)
+            };
         }
 
         public ServiceResult<bool> Update(ScheduleRecord ScheduleRecord)
@@ -140,9 +175,27 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status)
+        public ServiceResult<List<ScheduleRecord>> GetListByClassroomIds(List<short> classroomIds)
         {
-            throw new NotImplementedException();
+            var ScheduleRecords = _scheduleRecordDal.GetList(sr => classroomIds.Contains(sr.ClassroomId));
+            if (ScheduleRecords is not null)
+            {
+                return new ServiceResult<List<ScheduleRecord>>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.OK,
+                    Result = new SuccessDataResult<List<ScheduleRecord>>(ScheduleRecords.ToList(),
+                        Messages.success,
+                        Messages.success_code)
+                };
+            }
+
+            return new ServiceResult<List<ScheduleRecord>>
+            {
+                HttpStatusCode = (short)HttpStatusCode.NotFound,
+                Result = new ErrorDataResult<List<ScheduleRecord>>(new List<ScheduleRecord>(),
+                    Messages.scheduleRecord_not_found,
+                    Messages.scheduleRecord_not_found)
+            };
         }
     }
 }

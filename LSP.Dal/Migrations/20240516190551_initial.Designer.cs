@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSP.Dal.Migrations
 {
     [DbContext(typeof(LSPDbContext))]
-    [Migration("20240513124315_intial")]
-    partial class intial
+    [Migration("20240516190551_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,17 +200,14 @@ namespace LSP.Dal.Migrations
                     b.Property<int>("Day")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("EndingTime")
-                        .HasColumnType("time");
+                    b.Property<byte>("EndHour")
+                        .HasColumnType("tinyint");
 
                     b.Property<short>("LectureId")
                         .HasColumnType("smallint");
 
-                    b.Property<TimeSpan>("StartingTime")
-                        .HasColumnType("time");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<byte>("StartHour")
+                        .HasColumnType("tinyint");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");

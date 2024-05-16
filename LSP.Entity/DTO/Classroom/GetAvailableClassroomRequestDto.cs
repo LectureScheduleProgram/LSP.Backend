@@ -5,7 +5,7 @@ using LSP.Entity.Enum.ScheduleRecord;
 
 namespace LSP.Entity.DTO.Lecture
 {
-    public class GetAvailableClassroomListRequestDto : IDto
+    public class GetAvailableClassroomRequestDto : IDto
     {
         [DefaultValue(1)]
         public required byte ClassroomTypeId { get; set; }

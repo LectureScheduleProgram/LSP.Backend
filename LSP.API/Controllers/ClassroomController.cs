@@ -71,12 +71,22 @@ namespace LSP.API.Controllers
         }
 
         [SwaggerOperation(Summary = "Get Available List of Classroom", Description = "It gets the available list of Classroom")]
-        [ProducesResponseType(typeof(SuccessDataResult<List<GetAvailableClassroomListResponseDto>>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SuccessDataResult<List<GetAvailableClassroomResponseDto>>), (int)HttpStatusCode.OK)]
         [HttpGet]
         [Route("availableClassroomList")]
         public IActionResult GetAvailableClassroomList([FromQuery] GetAvailableClassroomListRequestDto request)
         {
             var result = _classroomService.GetAvailableClassroomList(request);
+            return StatusCode(result.HttpStatusCode, result.Result);
+        }
+
+        [SwaggerOperation(Summary = "Get Available of Classroom", Description = "It gets the available of Classroom")]
+        [ProducesResponseType(typeof(SuccessDataResult<GetAvailableClassroomResponseDto>), (int)HttpStatusCode.OK)]
+        [HttpGet]
+        [Route("availableClassroom")]
+        public IActionResult GetAvailableClassroom([FromQuery] GetAvailableClassroomRequestDto request)
+        {
+            var result = _classroomService.GetAvailableClassroom(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
     }

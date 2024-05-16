@@ -1,7 +1,6 @@
 ﻿using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.ScheduleRecord;
-using LSP.Entity.Enum.ScheduleRecord;
 using System.Linq.Expressions;
 
 namespace LSP.Business.Abstract
@@ -13,7 +12,8 @@ namespace LSP.Business.Abstract
         ServiceResult<bool> Delete(int id);
         ServiceResult<ScheduleRecord> GetById(int id);
         ServiceResult<List<ScheduleRecord>> GetList();
-        ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status);
+        ServiceResult<List<ScheduleRecord>> GetListByClassroomIds(List<short> classroomId);
+        // ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status);
         ServiceResult<ScheduleRecord> Get(Expression<Func<ScheduleRecord, bool>> filter);
     }
 }

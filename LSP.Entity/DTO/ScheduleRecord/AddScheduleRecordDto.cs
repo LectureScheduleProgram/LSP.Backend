@@ -7,10 +7,7 @@ namespace LSP.Entity.DTO.ScheduleRecord
     public class AddScheduleRecordDto
     {
         [DefaultValue(1)]
-        public required byte ClassroomTypeId { get; set; }
-
-        [DefaultValue(1)]
-        public required byte ClassroomCapacityId { get; set; }
+        public required byte ClassroomId { get; set; }
 
         [DefaultValue(DaysEnum.Monday)]
         public required DaysEnum Day { get; set; }

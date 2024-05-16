@@ -3,7 +3,7 @@ using LSP.Core.Entities;
 
 namespace LSP.Entity.DTO.Lecture
 {
-    public class GetAvailableClassroomListResponseDto : IDto
+    public class GetAvailableClassroomResponseDto : IDto
     {
         public short Id { get; set; }
         public required string Name { get; set; }
