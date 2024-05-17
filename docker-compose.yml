@@ -34,4 +34,4 @@ services:
 volumes:
   lsp_data:
     name: lsp_data
-    # external: true
+    external: true

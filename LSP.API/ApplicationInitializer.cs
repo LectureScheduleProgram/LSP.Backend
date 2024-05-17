@@ -12,8 +12,8 @@ namespace LSP.API
             var services = scope.ServiceProvider;
             try
             {
-                var context = new LSPDbContext();
-                context.Database.Migrate();
+                // var context = new LSPDbContext();
+                // context.Database.Migrate();
 
             }
             catch (Exception e)

@@ -9,20 +9,20 @@ namespace LSP.Dal.Concrete.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // if (!optionsBuilder.IsConfigured)
-            // {
-            //     IConfigurationRoot configuration = new ConfigurationBuilder()
-            //         .SetBasePath(Directory.GetCurrentDirectory())
-            //         .AddJsonFile("appsettings.json")
-            //         .Build();
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json")
+                    .Build();
 
-            //     optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
-            // }
+                optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
+            }
 
             // TODO: Make it better
             // When migrating, use the following connection string instead of the one above
-            optionsBuilder.UseSqlServer("Server=localhost,1433;Database=lsp;Uid=sa;Password=lspteam1708?;MultiSubnetFailover = True;TrustServerCertificate=True;");
-            base.OnConfiguring(optionsBuilder);
+            // optionsBuilder.UseSqlServer("Server=localhost,1433;Database=lsp;Uid=sa;Password=lspteam1708?;MultiSubnetFailover = True;TrustServerCertificate=True;");
+            // base.OnConfiguring(optionsBuilder);
         }
 
         // User
