@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
+using LSP.Entity.DTO.Lecture;
 
 namespace LSP.Business.Concrete
 {
@@ -17,9 +18,23 @@ namespace LSP.Business.Concrete
             _lectureDal = lectureDal;
         }
 
-        public ServiceResult<bool> Add(Lecture Lecture)
+        public ServiceResult<bool> Add(string name)
         {
-            _lectureDal.Add(Lecture);
+            if (string.IsNullOrEmpty(name))
+            {
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                        Messages.lecture_name_cant_empty,
+                        Messages.lecture_name_cant_empty)
+                };
+            }
+
+            _lectureDal.Add(new Lecture()
+            {
+                Name = name
+            });
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,

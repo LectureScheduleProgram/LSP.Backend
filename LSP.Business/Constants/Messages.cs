@@ -572,6 +572,7 @@ namespace LSP.Business.Constants
 
 
         public const string lecture_not_found = "lecture_not_found";
+        public const string lecture_name_cant_empty = "lecture_name_cant_empty";
 
         public const string classroom_not_found = "classroom_not_found";
         public const string classroom_already_exists = "classroom_already_exists";
@@ -584,6 +585,8 @@ namespace LSP.Business.Constants
         public const string classroomCapacity_not_found = "classroomCapacity_not_found";
 
         public const string scheduleRecord_already_exists = "scheduleRecord_already_exists";
+
+
 
     }
 }

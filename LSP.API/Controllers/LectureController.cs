@@ -6,6 +6,7 @@ using LSP.Business.Abstract;
 using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
+using LSP.Entity.DTO.Lecture;
 
 namespace LSP.API.Controllers
 {
@@ -25,9 +26,9 @@ namespace LSP.API.Controllers
         [SwaggerOperation(Summary = "Add Lecture", Description = "It Adds Lecture")]
         [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
         [HttpPost]
-        public IActionResult Add([Required] Lecture lecture)
+        public IActionResult Add([Required][FromQuery] string name)
         {
-            var result = _lectureService.Add(lecture);
+            var result = _lectureService.Add(name);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
