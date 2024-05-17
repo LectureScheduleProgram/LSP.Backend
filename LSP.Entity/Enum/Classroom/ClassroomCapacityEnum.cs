@@ -2,8 +2,8 @@ namespace LSP.Entity.Enum.Classroom
 {
     public enum ClassroomCapacityEnum
     {
-        Thirty = 1,
-        Fifty = 2,
-        Hundred = 3
+        Thirty = 30,
+        Fifty = 50,
+        Hundred = 100
     }
 }

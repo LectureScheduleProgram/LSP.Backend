@@ -93,8 +93,11 @@ namespace LSP.Dal.Migrations
 
             modelBuilder.Entity("LSP.Entity.Concrete.ClassroomCapacity", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<short>("Capacity")
                         .HasColumnType("smallint");
@@ -112,8 +115,11 @@ namespace LSP.Dal.Migrations
 
             modelBuilder.Entity("LSP.Entity.Concrete.ClassroomType", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");

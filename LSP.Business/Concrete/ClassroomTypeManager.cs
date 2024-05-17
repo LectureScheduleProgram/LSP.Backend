@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
+using LSP.Entity.Enum.Classroom;
+using LSP.Core.Extensions;
 
 namespace LSP.Business.Concrete
 {
@@ -17,9 +19,9 @@ namespace LSP.Business.Concrete
             _ClassroomTypeDal = ClassroomTypeDal;
         }
 
-        public ServiceResult<bool> Add(ClassroomType ClassroomType)
+        public ServiceResult<bool> Add(ClassroomTypeEnum type)
         {
-            _ClassroomTypeDal.Add(ClassroomType);
+            _ClassroomTypeDal.Add(new ClassroomType() { Name = type.EnumToString() });
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,

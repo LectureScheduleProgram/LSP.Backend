@@ -5,21 +5,22 @@ using System.Linq.Expressions;
 using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
+using LSP.Entity.Enum.Classroom;
 
 namespace LSP.Business.Concrete
 {
     public class ClassroomCapacityManager : IClassroomCapacityService
     {
-        private readonly IClassroomCapacityDal _ClassroomCapacityDal;
+        private readonly IClassroomCapacityDal _classroomCapacityDal;
 
-        public ClassroomCapacityManager(IClassroomCapacityDal ClassroomCapacityDal)
+        public ClassroomCapacityManager(IClassroomCapacityDal classroomCapacityDal)
         {
-            _ClassroomCapacityDal = ClassroomCapacityDal;
+            _classroomCapacityDal = classroomCapacityDal;
         }
 
-        public ServiceResult<bool> Add(ClassroomCapacity ClassroomCapacity)
+        public ServiceResult<bool> Add(ClassroomCapacityEnum capacity)
         {
-            _ClassroomCapacityDal.Add(ClassroomCapacity);
+            _classroomCapacityDal.Add(new ClassroomCapacity() { Capacity = (short)capacity });
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -31,7 +32,7 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<bool> Update(ClassroomCapacity ClassroomCapacity)
         {
-            var getClassroomCapacity = _ClassroomCapacityDal.Get(x => x.Id == ClassroomCapacity.Id);
+            var getClassroomCapacity = _classroomCapacityDal.Get(x => x.Id == ClassroomCapacity.Id);
             if (getClassroomCapacity is null)
             {
                 return new ServiceResult<bool>
@@ -43,7 +44,7 @@ namespace LSP.Business.Concrete
                 };
             }
 
-            _ClassroomCapacityDal.Update(ClassroomCapacity);
+            _classroomCapacityDal.Update(ClassroomCapacity);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -55,7 +56,7 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<bool> Delete(int id)
         {
-            var ClassroomCapacity = _ClassroomCapacityDal.Get(x => x.Id == id);
+            var ClassroomCapacity = _classroomCapacityDal.Get(x => x.Id == id);
             if (ClassroomCapacity is null)
             {
                 return new ServiceResult<bool>
@@ -67,7 +68,7 @@ namespace LSP.Business.Concrete
                 };
             }
 
-            _ClassroomCapacityDal.Delete(ClassroomCapacity);
+            _classroomCapacityDal.Delete(ClassroomCapacity);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -79,7 +80,7 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<ClassroomCapacity> Get(Expression<Func<ClassroomCapacity, bool>> filter)
         {
-            var result = _ClassroomCapacityDal.Get(filter);
+            var result = _classroomCapacityDal.Get(filter);
             if (result is not null)
             {
                 return new ServiceResult<ClassroomCapacity>
@@ -102,7 +103,7 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<ClassroomCapacity> GetById(int id)
         {
-            var ClassroomCapacity = _ClassroomCapacityDal.Get(x => x.Id == id);
+            var ClassroomCapacity = _classroomCapacityDal.Get(x => x.Id == id);
             if (ClassroomCapacity is not null)
             {
                 return new ServiceResult<ClassroomCapacity>
@@ -125,7 +126,7 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<List<ClassroomCapacity>> GetList()
         {
-            var ClassroomCapacitys = _ClassroomCapacityDal.GetList();
+            var ClassroomCapacitys = _classroomCapacityDal.GetList();
             if (ClassroomCapacitys is not null)
             {
                 return new ServiceResult<List<ClassroomCapacity>>

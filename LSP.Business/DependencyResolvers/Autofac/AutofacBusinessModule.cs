@@ -3,8 +3,6 @@ using Autofac.Extras.DynamicProxy;
 using Castle.DynamicProxy;
 using LSP.Business.Abstract;
 using LSP.Business.Concrete;
-using LSP.Business.Utilities.Services.Abstract;
-using LSP.Business.Utilities.Services.Concrete;
 using LSP.Core.Security;
 using LSP.Core.Utilities.Interceptors;
 using LSP.Dal.Abstract;
@@ -29,6 +27,21 @@ public class AutofacBusinessModule : Module
         builder.RegisterType<AuthManager>().As<IAuthService>();
         builder.RegisterType<JwtHelper>().As<ITokenHelper>();
 
+        builder.RegisterType<ClassroomManager>().As<IClassroomService>();
+        builder.RegisterType<EfClassroomDal>().As<IClassroomDal>();
+
+        builder.RegisterType<LectureManager>().As<ILectureService>();
+        builder.RegisterType<EfLectureDal>().As<ILectureDal>();
+
+        builder.RegisterType<ClassroomCapacityManager>().As<IClassroomCapacityService>();
+        builder.RegisterType<EfClassroomCapacityDal>().As<IClassroomCapacityDal>();
+
+        builder.RegisterType<ClassroomTypeManager>().As<IClassroomTypeService>();
+        builder.RegisterType<EfClassroomTypeDal>().As<IClassroomTypeDal>();
+
+        builder.RegisterType<ScheduleRecordManager>().As<IScheduleRecordService>();
+        builder.RegisterType<EfScheduleRecordDal>().As<IScheduleRecordDal>();
+
         builder.RegisterType<PasswordHistoryManager>().As<IPasswordHistoryService>();
         builder.RegisterType<EfPasswordHistoryDal>().As<IPasswordHistoryDal>();
 
@@ -43,8 +56,6 @@ public class AutofacBusinessModule : Module
         builder.RegisterType<ValidationRuleManager>().As<IValidationService>();
 
         builder.RegisterType<AccessControlManager>().As<IAccessControlService>();
-
-        builder.RegisterType<BalanceMailCsvOperationsManager>().As<IBalanceMailCsvOperationsService>();
 
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()

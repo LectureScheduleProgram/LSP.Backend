@@ -14,6 +14,7 @@ namespace LSP.Entity.DTO.Lecture
         public required byte ClassroomCapacityId { get; set; }
 
         [DefaultValue(DaysEnum.Monday)]
+        [Required]
         public required DaysEnum Day { get; set; }
 
         [Range(1, 24)]

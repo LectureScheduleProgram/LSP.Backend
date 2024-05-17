@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSP.Dal.Migrations
 {
     [DbContext(typeof(LSPDbContext))]
-    [Migration("20240516190551_initial")]
+    [Migration("20240516201131_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -96,8 +96,11 @@ namespace LSP.Dal.Migrations
 
             modelBuilder.Entity("LSP.Entity.Concrete.ClassroomCapacity", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<short>("Capacity")
                         .HasColumnType("smallint");
@@ -115,8 +118,11 @@ namespace LSP.Dal.Migrations
 
             modelBuilder.Entity("LSP.Entity.Concrete.ClassroomType", b =>
                 {
-                    b.Property<byte>("Id")
-                        .HasColumnType("tinyint");
+                    b.Property<short>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("smallint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<short>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");

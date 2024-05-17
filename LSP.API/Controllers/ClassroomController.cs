@@ -7,6 +7,7 @@ using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.DTO.Lecture;
+using LSP.Entity.DTO.ClassroomCapacity;
 
 namespace LSP.API.Controllers
 {
@@ -26,9 +27,9 @@ namespace LSP.API.Controllers
         [SwaggerOperation(Summary = "Add Classroom", Description = "It Adds Classroom")]
         [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
         [HttpPost]
-        public IActionResult Add([Required] Classroom Classroom)
+        public IActionResult Add([Required] AddClassroomDto request)
         {
-            var result = _classroomService.Add(Classroom);
+            var result = _classroomService.Add(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 

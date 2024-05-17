@@ -6,6 +6,7 @@ using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.Lecture;
+using LSP.Entity.DTO.ClassroomCapacity;
 
 namespace LSP.Business.Concrete
 {
@@ -24,9 +25,34 @@ namespace LSP.Business.Concrete
             _classroomTypeService = classroomTypeService;
         }
         #region CRUD
-        public ServiceResult<bool> Add(Classroom Classroom)
+        public ServiceResult<bool> Add(AddClassroomDto classroom)
         {
-            _classroomsDal.Add(Classroom);
+            if (string.IsNullOrEmpty(classroom.Name))
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                        Messages.classroom_name_cannot_be_empty,
+                        Messages.classroom_name_cannot_be_empty)
+                };
+
+            var classroomFromDb = _classroomsDal.Get(x => x.Name == classroom.Name.Trim());
+            if (classroomFromDb is not null)
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                        Messages.classroom_already_exists,
+                        Messages.classroom_already_exists)
+                };
+
+            _classroomsDal.Add(new Classroom()
+            {
+                Name = classroom.Name,
+                ClassroomCapacityId = classroom.ClassroomCapacityId,
+                ClassroomTypeId = classroom.ClassroomTypeId
+            });
+
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
