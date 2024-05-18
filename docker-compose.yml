@@ -1,22 +1,22 @@
 ﻿version: '3.4'
 
 services:
-  lsp_api:
-    image: lsp_api
-    container_name: lsp_api
-    build:
-      context: .
-      dockerfile: LSP.API/Dockerfile
-    ports:
-      - "5020:5020"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5020
-      - SecurityBlockControl=true
-    depends_on:
-      - lsp_db
-    networks:
-      - dev
+  # lsp_api:
+  #   image: lsp_api
+  #   container_name: lsp_api
+  #   build:
+  #     context: .
+  #     dockerfile: LSP.API/Dockerfile
+  #   ports:
+  #     - "5020:5020"
+  #   environment:
+  #     - ASPNETCORE_ENVIRONMENT=Development
+  #     - ASPNETCORE_URLS=http://+:5020
+  #     - SecurityBlockControl=true
+  #   depends_on:
+  #     - lsp_db
+  #   networks:
+  #     - dev
 
   lsp_db:
     image: mcr.microsoft.com/mssql/server:2022-latest
