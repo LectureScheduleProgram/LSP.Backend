@@ -67,7 +67,6 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
-	opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 	opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 

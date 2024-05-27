@@ -223,7 +223,7 @@ namespace LSP.Business.Concrete
             if (classrooms is null || classrooms.Count is 0)
                 return new ServiceResult<GetAvailableClassroomResponseDto>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.OK,
                     Result = new ErrorDataResult<GetAvailableClassroomResponseDto>(null,
                         Messages.classroom_not_found,
                         Messages.classroom_not_found)
@@ -236,7 +236,7 @@ namespace LSP.Business.Concrete
 
                 return new ServiceResult<GetAvailableClassroomResponseDto>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.OK,
                     Result = new SuccessDataResult<GetAvailableClassroomResponseDto>(
                         availableClassroom,
                         Messages.success,
@@ -252,7 +252,7 @@ namespace LSP.Business.Concrete
 
                 return new ServiceResult<GetAvailableClassroomResponseDto>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.OK,
                     Result = new SuccessDataResult<GetAvailableClassroomResponseDto>(
                         availableClassroom,
                         Messages.success,

@@ -50,7 +50,9 @@ namespace LSP.Business.Concrete
                     (record.StartHour == request.StartHour && record.EndHour > request.EndHour) ||
                     (record.StartHour < request.StartHour && record.EndHour == request.EndHour) ||
                     (record.StartHour < request.StartHour && record.EndHour > request.EndHour) ||
+                    (record.StartHour < request.StartHour && record.EndHour < request.EndHour) ||
                     (record.StartHour > request.StartHour && record.EndHour == request.EndHour) ||
+                    (record.StartHour > request.StartHour && record.EndHour > request.EndHour) ||
                     (record.StartHour > request.StartHour && record.EndHour < request.EndHour)
                 )
             );
@@ -234,7 +236,9 @@ namespace LSP.Business.Concrete
                     (record.StartHour == startHour && record.EndHour > endHour) ||
                     (record.StartHour < startHour && record.EndHour == endHour) ||
                     (record.StartHour < startHour && record.EndHour > endHour) ||
+                    (record.StartHour < startHour && record.EndHour < endHour) ||
                     (record.StartHour > startHour && record.EndHour == endHour) ||
+                    (record.StartHour > startHour && record.EndHour > endHour) ||
                     (record.StartHour > startHour && record.EndHour < endHour)
                 )
             );
