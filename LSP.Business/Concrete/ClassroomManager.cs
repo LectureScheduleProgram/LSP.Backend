@@ -7,6 +7,7 @@ using System.Net;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.Lecture;
 using LSP.Entity.DTO.ClassroomCapacity;
+using LSP.Entity.DTO.Classroom;
 
 namespace LSP.Business.Concrete
 {
@@ -17,25 +18,16 @@ namespace LSP.Business.Concrete
         private readonly IClassroomCapacityService _classroomCapacityService;
         private readonly IClassroomTypeService _classroomTypeService;
 
-        public ClassroomManager(IClassroomDal classroomsDal, IScheduleRecordService scheduleRecordService, IClassroomCapacityService classroomCapacityService, IClassroomTypeService classroomTypeService)
+        public ClassroomManager(IClassroomDal classroomsDal, IClassroomCapacityService classroomCapacityService, IClassroomTypeService classroomTypeService, IScheduleRecordService scheduleRecordService)
         {
             _classroomsDal = classroomsDal;
-            _scheduleRecordService = scheduleRecordService;
             _classroomCapacityService = classroomCapacityService;
             _classroomTypeService = classroomTypeService;
+            _scheduleRecordService = scheduleRecordService;
         }
         #region CRUD
         public ServiceResult<bool> Add(AddClassroomDto classroom)
         {
-            if (string.IsNullOrEmpty(classroom.Name))
-                return new ServiceResult<bool>
-                {
-                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
-                    Result = new ErrorDataResult<bool>(false,
-                        Messages.classroom_name_cannot_be_empty,
-                        Messages.classroom_name_cannot_be_empty)
-                };
-
             var classroomFromDb = _classroomsDal.Get(x => x.Name == classroom.Name.Trim());
             if (classroomFromDb is not null)
                 return new ServiceResult<bool>
@@ -62,10 +54,10 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public ServiceResult<bool> Update(Classroom Classroom)
+        public ServiceResult<bool> Update(UpdateClassroomDto request)
         {
-            var getClassroom = _classroomsDal.Get(x => x.Id == Classroom.Id);
-            if (getClassroom is null)
+            var classroomFromDb = _classroomsDal.Get(x => x.Id == request.Id);
+            if (classroomFromDb is null)
             {
                 return new ServiceResult<bool>
                 {
@@ -76,7 +68,29 @@ namespace LSP.Business.Concrete
                 };
             }
 
-            _classroomsDal.Update(Classroom);
+            if (classroomFromDb.Name.Equals(request.Name.Trim()))
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                            Messages.classroom_name_same,
+                            Messages.classroom_name_same)
+                };
+
+            var classroomExists = _classroomsDal.Get(c => c.Name == request.Name.Trim());
+            if (classroomExists.Id != classroomFromDb.Id)
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
+                    Result = new ErrorDataResult<bool>(false,
+                        Messages.classroom_already_exists,
+                        Messages.classroom_already_exists)
+                };
+
+            classroomFromDb.Name = request.Name;
+            classroomFromDb.UpdatedDate = DateTime.Now;
+
+            _classroomsDal.Update(classroomFromDb);
             return new ServiceResult<bool>
             {
                 HttpStatusCode = (short)HttpStatusCode.OK,
@@ -182,13 +196,31 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<GetAvailableClassroomResponseDto> GetAvailableClassroom(GetAvailableClassroomRequestDto request)
         {
+            if (request.StartHour == request.EndHour)
+                return new ServiceResult<GetAvailableClassroomResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<GetAvailableClassroomResponseDto>(null,
+                        Messages.same_start_end_hour,
+                        Messages.same_start_end_hour)
+                };
+
+            if (request.StartHour > request.EndHour)
+                return new ServiceResult<GetAvailableClassroomResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<GetAvailableClassroomResponseDto>(
+                        null,
+                        Messages.start_hour_must_smaller,
+                        Messages.start_hour_must_smaller)
+                };
+
             var classrooms = _classroomsDal.GetList(c =>
                 c.ClassroomCapacityId == request.ClassroomCapacityId &&
                 c.ClassroomTypeId == request.ClassroomTypeId)
                 .ToList();
 
             if (classrooms is null || classrooms.Count is 0)
-            {
                 return new ServiceResult<GetAvailableClassroomResponseDto>
                 {
                     HttpStatusCode = (short)HttpStatusCode.NotFound,
@@ -196,7 +228,6 @@ namespace LSP.Business.Concrete
                         Messages.classroom_not_found,
                         Messages.classroom_not_found)
                 };
-            }
 
             var scheduleRecords = _scheduleRecordService.GetListByClassroomIds(classrooms.Select(c => c.Id).ToList());
             if (!scheduleRecords.Result.Success)
@@ -213,22 +244,7 @@ namespace LSP.Business.Concrete
                 };
             }
             else
-            {
-                for (int i = 0; i < classrooms.Count; i++)
-                {
-                    if (scheduleRecords.Result.Data!.Exists(sr =>
-                        sr.ClassroomId == classrooms[i].Id &&
-                        sr.Day == request.Day &&
-                        (
-                            (sr.StartHour == request.StartHour && sr.EndHour == request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour)
-                        )
-                    )) classrooms.Remove(classrooms[i]);
-                }
-            }
+                EliminateMatchedClasses(request, classrooms, scheduleRecords.Result.Data!);
 
             if (classrooms.Count > 0)
             {
@@ -254,8 +270,28 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public ServiceResult<List<GetAvailableClassroomResponseDto>> GetAvailableClassroomList(GetAvailableClassroomListRequestDto request)
+        public ServiceResult<List<GetAvailableClassroomResponseDto>> GetAvailableClassroomList(GetAvailableClassroomRequestDto request)
         {
+            if (request.StartHour == request.EndHour)
+                return new ServiceResult<List<GetAvailableClassroomResponseDto>>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<List<GetAvailableClassroomResponseDto>>(
+                        null,
+                        Messages.same_start_end_hour,
+                        Messages.same_start_end_hour)
+                };
+
+            if (request.StartHour > request.EndHour)
+                return new ServiceResult<List<GetAvailableClassroomResponseDto>>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<List<GetAvailableClassroomResponseDto>>(
+                        null,
+                        Messages.start_hour_must_smaller,
+                        Messages.start_hour_must_smaller)
+                };
+
             var classrooms = _classroomsDal.GetList(c =>
                 c.ClassroomCapacityId == request.ClassroomCapacityId &&
                 c.ClassroomTypeId == request.ClassroomTypeId)
@@ -286,7 +322,7 @@ namespace LSP.Business.Concrete
 
                 return new ServiceResult<List<GetAvailableClassroomResponseDto>>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.OK,
                     Result = new SuccessDataResult<List<GetAvailableClassroomResponseDto>>(
                         availableClassrooms,
                         Messages.success,
@@ -294,22 +330,7 @@ namespace LSP.Business.Concrete
                 };
             }
             else
-            {
-                for (int i = 0; i < classrooms.Count; i++)
-                {
-                    if (scheduleRecords.Result.Data!.Exists(sr =>
-                        sr.ClassroomId == classrooms[i].Id &&
-                        sr.Day == request.Day &&
-                        (
-                            (sr.StartHour == request.StartHour && sr.EndHour == request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                            (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour)
-                        )
-                    )) classrooms.Remove(classrooms[i]);
-                }
-            }
+                EliminateMatchedClasses(request, classrooms, scheduleRecords.Result.Data!);
 
             if (classrooms.Count > 0)
             {
@@ -323,7 +344,7 @@ namespace LSP.Business.Concrete
 
                 return new ServiceResult<List<GetAvailableClassroomResponseDto>>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.OK,
                     Result = new SuccessDataResult<List<GetAvailableClassroomResponseDto>>(
                         availableClassrooms,
                         Messages.success,
@@ -341,9 +362,19 @@ namespace LSP.Business.Concrete
             };
         }
 
+        private void EliminateMatchedClasses(GetAvailableClassroomRequestDto request, List<Classroom> classrooms, List<ScheduleRecord> scheduleRecords)
+        {
+            for (int i = 0; i < scheduleRecords.Count; i++)
+            {
+                if (_scheduleRecordService.TimeControl(scheduleRecords, request.Day, request.StartHour, request.EndHour))
+                    classrooms.Remove(classrooms[i]);
+            }
+        }
+
         private GetAvailableClassroomResponseDto GetRandomClassroom(List<Classroom> classrooms)
         {
-            var classroom = classrooms[new Random().Next(0, classrooms.Count - 1)];
+            var randomIdIndex = new Random().Next(0, classrooms.Count);
+            var classroom = classrooms[randomIdIndex];
 
             return new GetAvailableClassroomResponseDto()
             {

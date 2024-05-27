@@ -8,6 +8,8 @@ namespace LSP.Entity.DTO.ScheduleRecord
     {
         [DefaultValue(1)]
         public required byte ClassroomId { get; set; }
+        [DefaultValue(1)]
+        public required byte LectureId { get; set; }
 
         [DefaultValue(DaysEnum.Monday)]
         public required DaysEnum Day { get; set; }

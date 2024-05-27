@@ -248,7 +248,6 @@ namespace LSP.Business.Constants
         public static string cannot_update_more_than_one_security_option_code = "cannot_update_more_than_one_security_option_at_the_same_time";//tek bir seferde 1 den fazla güvenlik seçeneği güncellenemez.
         public static string passwords_cannot_be_the_same = "passwords_cannot_be_the_same";//tek bir seferde 1 den fazla güvenlik seçeneği güncellenemez.
         public static string you_cannot_make_multiple_withdrawals = "You cannot make multiple withdrawals. please wait for your transaction to be processed";
-
         public const string leads_not_found = "leads_not_found";// lead bulunamadı.
         public const string lead_notes_not_found = "lead_notes_not_found"; // lead notları bulunamadı.
         public const string calling_statuses_not_found = "calling_statuses_not_found"; // arama durumları bulunamadı.
@@ -577,8 +576,13 @@ namespace LSP.Business.Constants
         public const string classroom_not_found = "classroom_not_found";
         public const string classroom_already_exists = "classroom_already_exists";
         public const string classroom_name_cannot_be_empty = "classroom_name_cannot_be_empty";
+        public const string classroom_name_same = "classroom_name_same";
+
 
         public const string scheduleRecord_not_found = "scheduleRecord_not_found";
+        public const string same_start_end_hour = "same_start_end_hour";
+        public const string start_hour_must_smaller = "start_hour_must_smaller";
+
 
         public const string classroomType_not_found = "classroomType_not_found";
 

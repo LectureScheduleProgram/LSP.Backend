@@ -6,6 +6,7 @@ using LSP.Business.Constants;
 using System.Net;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.ScheduleRecord;
+using LSP.Entity.Enum.ScheduleRecord;
 
 namespace LSP.Business.Concrete
 {
@@ -17,18 +18,42 @@ namespace LSP.Business.Concrete
         {
             _scheduleRecordDal = scheduleRecordDal;
         }
+
         public ServiceResult<bool> Add(AddScheduleRecordDto request)
         {
-            var scheduleRecord = _scheduleRecordDal.Get(sr =>
-            sr.ClassroomId == request.ClassroomId
-            && sr.Day == request.Day &&
-            (
-                (sr.StartHour == request.StartHour && sr.EndHour == request.EndHour) ||
-                (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour) ||
-                (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                (sr.StartHour < request.StartHour && sr.EndHour < request.EndHour) ||
-                (sr.StartHour < request.StartHour && sr.EndHour > request.EndHour)
-            ));
+            if (request.StartHour == request.EndHour)
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<bool>(
+                        false,
+                        Messages.same_start_end_hour,
+                        Messages.same_start_end_hour)
+                };
+
+            if (request.StartHour > request.EndHour)
+                return new ServiceResult<bool>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<bool>(
+                        false,
+                        Messages.start_hour_must_smaller,
+                        Messages.start_hour_must_smaller)
+                };
+
+            var scheduleRecord = _scheduleRecordDal.Get(record =>
+                record.ClassroomId == request.ClassroomId &&
+                record.Day == request.Day &&
+                (
+                    (record.StartHour == request.StartHour && record.EndHour == request.EndHour) ||
+                    (record.StartHour == request.StartHour && record.EndHour < request.EndHour) ||
+                    (record.StartHour == request.StartHour && record.EndHour > request.EndHour) ||
+                    (record.StartHour < request.StartHour && record.EndHour == request.EndHour) ||
+                    (record.StartHour < request.StartHour && record.EndHour > request.EndHour) ||
+                    (record.StartHour > request.StartHour && record.EndHour == request.EndHour) ||
+                    (record.StartHour > request.StartHour && record.EndHour < request.EndHour)
+                )
+            );
 
             if (scheduleRecord is not null)
             {
@@ -44,6 +69,7 @@ namespace LSP.Business.Concrete
             _scheduleRecordDal.Add(new ScheduleRecord
             {
                 ClassroomId = request.ClassroomId,
+                LectureId = request.LectureId,
                 Day = request.Day,
                 StartHour = request.StartHour,
                 EndHour = request.EndHour
@@ -196,6 +222,22 @@ namespace LSP.Business.Concrete
                     Messages.scheduleRecord_not_found,
                     Messages.scheduleRecord_not_found)
             };
+        }
+
+        public bool TimeControl(List<ScheduleRecord> list, DaysEnum day, byte startHour, byte endHour)
+        {
+            return list.Exists(record =>
+                record.Day == day &&
+                (
+                    (record.StartHour == startHour && record.EndHour == endHour) ||
+                    (record.StartHour == startHour && record.EndHour < endHour) ||
+                    (record.StartHour == startHour && record.EndHour > endHour) ||
+                    (record.StartHour < startHour && record.EndHour == endHour) ||
+                    (record.StartHour < startHour && record.EndHour > endHour) ||
+                    (record.StartHour > startHour && record.EndHour == endHour) ||
+                    (record.StartHour > startHour && record.EndHour < endHour)
+                )
+            );
         }
     }
 }

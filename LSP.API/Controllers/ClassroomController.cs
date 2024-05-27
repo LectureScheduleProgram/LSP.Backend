@@ -8,6 +8,7 @@ using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.DTO.Lecture;
 using LSP.Entity.DTO.ClassroomCapacity;
+using LSP.Entity.DTO.Classroom;
 
 namespace LSP.API.Controllers
 {
@@ -36,9 +37,9 @@ namespace LSP.API.Controllers
         [SwaggerOperation(Summary = "Update Classroom", Description = "It updates Classroom")]
         [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
         [HttpPut]
-        public IActionResult Update(Classroom Classroom)
+        public IActionResult Update(UpdateClassroomDto request)
         {
-            var result = _classroomService.Update(Classroom);
+            var result = _classroomService.Update(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
@@ -75,7 +76,7 @@ namespace LSP.API.Controllers
         [ProducesResponseType(typeof(SuccessDataResult<List<GetAvailableClassroomResponseDto>>), (int)HttpStatusCode.OK)]
         [HttpGet]
         [Route("availableClassroomList")]
-        public IActionResult GetAvailableClassroomList([FromQuery] GetAvailableClassroomListRequestDto request)
+        public IActionResult GetAvailableClassroomList([FromQuery] GetAvailableClassroomRequestDto request)
         {
             var result = _classroomService.GetAvailableClassroomList(request);
             return StatusCode(result.HttpStatusCode, result.Result);

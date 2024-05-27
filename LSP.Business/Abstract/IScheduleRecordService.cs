@@ -1,6 +1,7 @@
 ﻿using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using LSP.Entity.DTO.ScheduleRecord;
+using LSP.Entity.Enum.ScheduleRecord;
 using System.Linq.Expressions;
 
 namespace LSP.Business.Abstract
@@ -15,5 +16,6 @@ namespace LSP.Business.Abstract
         ServiceResult<List<ScheduleRecord>> GetListByClassroomIds(List<short> classroomId);
         // ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status);
         ServiceResult<ScheduleRecord> Get(Expression<Func<ScheduleRecord, bool>> filter);
+        bool TimeControl(List<ScheduleRecord> list, DaysEnum day, byte startHour, byte endHour);
     }
 }
