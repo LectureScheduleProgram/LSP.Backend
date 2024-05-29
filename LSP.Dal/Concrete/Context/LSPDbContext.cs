@@ -16,7 +16,8 @@ namespace LSP.Dal.Concrete.Context
                     .AddJsonFile("appsettings.json")
                     .Build();
 
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
+                // RUN HERE WITH CONFUGURATION ABOVE ONE
+                optionsBuilder.UseSqlServer("Server=lsp_db,1433;Database=lsp;Uid=sa;Password=lspteam1708?;MultiSubnetFailover=True;TrustServerCertificate=True;");
             }
 
             // TODO: Make it better

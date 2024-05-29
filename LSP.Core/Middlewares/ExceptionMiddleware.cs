@@ -23,13 +23,12 @@ namespace LSP.Core.Extensions
             }
             catch (ValidationException ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
                 await HandleValidationExceptionAsync(httpContext, ex);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.InnerException?.ToString());
+                Console.WriteLine(ex);
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
