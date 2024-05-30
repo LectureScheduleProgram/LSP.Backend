@@ -11,11 +11,6 @@ namespace LSP.Dal.Concrete.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // IConfigurationRoot configuration = new ConfigurationBuilder()
-                //     .SetBasePath(Directory.GetCurrentDirectory())
-                //     .AddJsonFile("appsettings.json")
-                //     .Build();
-
                 IConfigurationRoot configuration = new ConfigurationBuilder()
                     .AddEnvironmentVariables()
                     .Build();
@@ -25,9 +20,14 @@ namespace LSP.Dal.Concrete.Context
 
             // TODO: Make it better
             // When migrating, use the following connection string instead of the one above
+
+            // string currenctDirectory = Directory.GetCurrentDirectory();
+            // string apiProjectPath = Path.Combine(currenctDirectory, "..", "LSP.API");
+            // string appSettingsPath = Path.Combine(apiProjectPath, "appsettings.json");
+
             // IConfigurationRoot configuration = new ConfigurationBuilder()
-            //     .SetBasePath(Directory.GetCurrentDirectory())
-            //     .AddJsonFile("appsettings.json")
+            //     .SetBasePath(apiProjectPath)
+            //     .AddJsonFile(appSettingsPath)
             //     .Build();
             // optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
             // base.OnConfiguring(optionsBuilder);
