@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LSP.Core.Entities;
+﻿using LSP.Core.Entities;
 
 namespace LSP.Entity.DTO.User
 {

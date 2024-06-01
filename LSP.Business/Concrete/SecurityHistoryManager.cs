@@ -1,5 +1,4 @@
 ﻿using LSP.Business.Abstract;
-using LSP.Core.Entities.Concrete;
 using LSP.Core.Result;
 using LSP.Dal.Abstract;
 using System.Linq.Expressions;

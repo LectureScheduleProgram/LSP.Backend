@@ -9,7 +9,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using LSP.Core.Utilities.Constants;
-using System.Collections.Generic;
 
 namespace LSP.Core.Security
 {

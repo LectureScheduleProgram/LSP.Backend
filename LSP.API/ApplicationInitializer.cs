@@ -1,17 +1,13 @@
-﻿
-using LSP.Dal.Concrete.Context;
-using Microsoft.EntityFrameworkCore;
-
-namespace LSP.API
+﻿namespace LSP.API
 {
     public class ApplicationInitializer
     {
         public void Initialize(WebApplication application)
         {
-            using var scope = application.Services.CreateScope();
-            var services = scope.ServiceProvider;
             try
             {
+                // using var scope = application.Services.CreateScope();
+                // var services = scope.ServiceProvider;
                 // var context = new LSPDbContext();
                 // context.Database.Migrate();
 

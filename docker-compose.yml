@@ -20,7 +20,7 @@ services:
       - dev
 
   lsp_db:
-    image: mcr.microsoft.com/mssql/server:2022-latest #mcr.microsoft.com/azure-sql-edge
+    image: mcr.microsoft.com/azure-sql-edge #mcr.microsoft.com/mssql/server:2022-latest
     container_name: lsp_db
     environment:
       SA_PASSWORD: lspteam1708?
@@ -32,7 +32,8 @@ services:
       - "1433:1433"
     restart: always
     volumes:
-      - lsp_data:/var/opt/mssql/data
+      - lsp_data:/var/opt/mssql # azure-sql-edge
+      # - lsp_data:/var/opt/mssql/data # mssql
     networks:
       - dev
 

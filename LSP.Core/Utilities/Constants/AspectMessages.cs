@@ -1,7 +1,4 @@
-﻿using FluentValidation.Results;
-using System;
-
-namespace LSP.Core.Utilities.Constants
+﻿namespace LSP.Core.Utilities.Constants
 {
     public static class AspectMessages
     {

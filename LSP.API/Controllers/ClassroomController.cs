@@ -4,7 +4,6 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using LSP.Business.Abstract;
 using LSP.Core.Result;
-using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.DTO.Lecture;
 using LSP.Entity.DTO.ClassroomCapacity;

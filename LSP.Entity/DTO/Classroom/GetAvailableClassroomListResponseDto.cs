@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using LSP.Core.Entities;
 
 namespace LSP.Entity.DTO.Lecture

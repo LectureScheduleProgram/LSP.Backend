@@ -1,5 +1,4 @@
 ﻿using LSP.Core.Entities;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
 
 namespace LSP.Entity.DTO

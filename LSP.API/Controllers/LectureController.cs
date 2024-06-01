@@ -4,9 +4,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using LSP.Business.Abstract;
 using LSP.Core.Result;
-using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
-using LSP.Entity.DTO.Lecture;
+using LSP.Entity.DTO.Department;
 
 namespace LSP.API.Controllers
 {
@@ -26,18 +25,18 @@ namespace LSP.API.Controllers
         [SwaggerOperation(Summary = "Add Lecture", Description = "It Adds Lecture")]
         [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
         [HttpPost]
-        public IActionResult Add([Required][FromQuery] string name)
+        public IActionResult Add([Required] AddLectureDto request)
         {
-            var result = _lectureService.Add(name);
+            var result = _lectureService.Add(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
         [SwaggerOperation(Summary = "Update Lecture", Description = "It updates Lecture")]
         [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
         [HttpPut]
-        public IActionResult Update(Lecture lecture)
+        public IActionResult Update([Required] UpdateLectureDto request)
         {
-            var result = _lectureService.Update(lecture);
+            var result = _lectureService.Update(request);
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
@@ -52,7 +51,7 @@ namespace LSP.API.Controllers
         }
 
         [SwaggerOperation(Summary = "Get Lecture By Id", Description = "It gets the Lecture by id")]
-        [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SuccessDataResult<LectureDto>), (int)HttpStatusCode.OK)]
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById([Required][FromRoute] short id)
@@ -62,7 +61,7 @@ namespace LSP.API.Controllers
         }
 
         [SwaggerOperation(Summary = "Get List of Lecture", Description = "It gets the list of Lecture")]
-        [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SuccessDataResult<List<LectureDto>>), (int)HttpStatusCode.OK)]
         [HttpGet]
         public IActionResult GetList()
         {

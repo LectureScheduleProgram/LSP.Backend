@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using LSP.Core.Utilities.CustomAttributes;
 
 namespace LSP.Entity.DTO.Authentication
 {

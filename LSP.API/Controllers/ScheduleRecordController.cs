@@ -6,7 +6,6 @@ using LSP.Business.Abstract;
 using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
-using LSP.Entity.Enum.ScheduleRecord;
 using LSP.Entity.DTO.ScheduleRecord;
 
 namespace LSP.API.Controllers

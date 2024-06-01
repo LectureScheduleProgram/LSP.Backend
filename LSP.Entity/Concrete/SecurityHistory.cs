@@ -1,5 +1,4 @@
 ﻿using LSP.Core;
-using System;
 
 namespace LSP.Entity.Concrete
 {

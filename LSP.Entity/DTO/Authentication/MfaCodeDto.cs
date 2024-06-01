@@ -1,6 +1,5 @@
 ﻿using LSP.Core.Entities;
 using System.ComponentModel.DataAnnotations;
-using LSP.Entity.Enums.Authentication;
 
 namespace LSP.Entity.DTO
 {

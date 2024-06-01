@@ -33,6 +33,12 @@ public class AutofacBusinessModule : Module
         builder.RegisterType<LectureManager>().As<ILectureService>();
         builder.RegisterType<EfLectureDal>().As<ILectureDal>();
 
+        builder.RegisterType<FacultyManager>().As<IFacultyService>();
+        builder.RegisterType<EfFacultyDal>().As<IFacultyDal>();
+
+        builder.RegisterType<DepartmentManager>().As<IDepartmentService>();
+        builder.RegisterType<EfDepartmentDal>().As<IDepartmentDal>();
+
         builder.RegisterType<ClassroomCapacityManager>().As<IClassroomCapacityService>();
         builder.RegisterType<EfClassroomCapacityDal>().As<IClassroomCapacityDal>();
 

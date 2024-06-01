@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using LSP.Business.Abstract;
 using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
-using LSP.Entity.DTO.Lecture;
 using LSP.Entity.Enum.Classroom;
 
 namespace LSP.API.Controllers
@@ -14,7 +12,6 @@ namespace LSP.API.Controllers
     [SwaggerTag("Classroom Capacity Controller")]
     [Route("api/classroomCapacity")]
     [ApiController]
-    [Authorize]
     public class ClassroomCapacityController : ControllerBase
     {
         private readonly IClassroomCapacityService _classroomCapacityService;

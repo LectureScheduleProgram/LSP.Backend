@@ -9,6 +9,18 @@ namespace LSP.Dal.Concrete.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //local
+            // if (!optionsBuilder.IsConfigured)
+            // {
+            //     IConfigurationRoot configuration = new ConfigurationBuilder()
+            //        .SetBasePath(Directory.GetCurrentDirectory())
+            //        .AddJsonFile("appsettings.json")
+            //        .Build();
+
+            //     optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
+            // }
+
+            //docker
             if (!optionsBuilder.IsConfigured)
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -17,21 +29,24 @@ namespace LSP.Dal.Concrete.Context
 
                 optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
             }
-
-            // TODO: Make it better
-            // When migrating, use the following connection string instead of the one above
-
-            // string currenctDirectory = Directory.GetCurrentDirectory();
-            // string apiProjectPath = Path.Combine(currenctDirectory, "..", "LSP.API");
-            // string appSettingsPath = Path.Combine(apiProjectPath, "appsettings.json");
-
-            // IConfigurationRoot configuration = new ConfigurationBuilder()
-            //     .SetBasePath(apiProjectPath)
-            //     .AddJsonFile(appSettingsPath)
-            //     .Build();
-            // optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
-            // base.OnConfiguring(optionsBuilder);
         }
+
+        // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     // TODO: Make it better
+        //     // When migrating, use the following connection string instead of the one above
+
+        //     string currenctDirectory = Directory.GetCurrentDirectory();
+        //     string apiProjectPath = Path.Combine(currenctDirectory, "..", "LSP.API");
+        //     string appSettingsPath = Path.Combine(apiProjectPath, "appsettings.json");
+
+        //     IConfigurationRoot configuration = new ConfigurationBuilder()
+        //         .SetBasePath(apiProjectPath)
+        //         .AddJsonFile(appSettingsPath)
+        //         .Build();
+        //     optionsBuilder.UseSqlServer(configuration.GetConnectionString("LSPDbContextConnection"));
+        //     base.OnConfiguring(optionsBuilder);
+        // }
 
         // User
         public DbSet<User> Users { get; set; }
@@ -47,6 +62,12 @@ namespace LSP.Dal.Concrete.Context
 
         // Lecture
         public DbSet<Lecture> Lectures { get; set; }
+
+        // Faculty
+        public DbSet<Faculty> Faculties { get; set; }
+
+        // Department
+        public DbSet<Department> Departments { get; set; }
 
         // ScheduleRecord
         public DbSet<ScheduleRecord> ScheduleRecords { get; set; }
