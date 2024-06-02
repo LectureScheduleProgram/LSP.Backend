@@ -205,13 +205,13 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<List<ScheduleRecord>> GetListByClassroomIds(List<short> classroomIds)
         {
-            var ScheduleRecords = _scheduleRecordDal.GetList(sr => classroomIds.Contains(sr.ClassroomId));
-            if (ScheduleRecords is not null)
+            var scheduleRecords = _scheduleRecordDal.GetList(sr => classroomIds.Contains(sr.ClassroomId));
+            if (scheduleRecords is not null)
             {
                 return new ServiceResult<List<ScheduleRecord>>
                 {
                     HttpStatusCode = (short)HttpStatusCode.OK,
-                    Result = new SuccessDataResult<List<ScheduleRecord>>(ScheduleRecords.ToList(),
+                    Result = new SuccessDataResult<List<ScheduleRecord>>(scheduleRecords.ToList(),
                         Messages.success,
                         Messages.success_code)
                 };

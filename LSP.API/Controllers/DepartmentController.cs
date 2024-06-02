@@ -10,7 +10,7 @@ using LSP.Entity.DTO.Department;
 namespace LSP.API.Controllers
 {
     [SwaggerTag("Department Controller")]
-    [Route("api/Department")]
+    [Route("api/department")]
     [ApiController]
     [Authorize]
     public class DepartmentController : ControllerBase

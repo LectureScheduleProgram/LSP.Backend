@@ -6,12 +6,14 @@ using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.Enum.Classroom;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LSP.API.Controllers
 {
     [SwaggerTag("Classroom Capacity Controller")]
     [Route("api/classroomCapacity")]
     [ApiController]
+    [Authorize]
     public class ClassroomCapacityController : ControllerBase
     {
         private readonly IClassroomCapacityService _classroomCapacityService;

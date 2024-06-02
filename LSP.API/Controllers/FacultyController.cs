@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 namespace LSP.API.Controllers
 {
     [SwaggerTag("Faculty Controller")]
-    [Route("api/Faculty")]
+    [Route("api/faculty")]
     [ApiController]
     [Authorize]
     public class FacultyController : ControllerBase

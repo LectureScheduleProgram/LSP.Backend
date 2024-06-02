@@ -63,6 +63,8 @@ public class AutofacBusinessModule : Module
 
         builder.RegisterType<AccessControlManager>().As<IAccessControlService>();
 
+        builder.RegisterType<DashboardManager>().As<IDashboardService>();
+
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         builder.RegisterAssemblyTypes(assembly).AsImplementedInterfaces()
             .EnableInterfaceInterceptors(new ProxyGenerationOptions()
