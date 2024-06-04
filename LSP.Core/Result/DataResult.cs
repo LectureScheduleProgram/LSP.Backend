@@ -5,7 +5,6 @@
         public DataResult(bool success, string message, string messageCode, T? data) : base(success, message, messageCode)
         {
             Data = data;
-
         }
 
         public DataResult(T? data, bool success) : base(success)
@@ -14,6 +13,5 @@
         }
 
         public T? Data { get; }
-
     }
 }

@@ -2,6 +2,7 @@
 using Autofac.Extras.DynamicProxy;
 using Castle.DynamicProxy;
 using LSP.Business.Abstract;
+using LSP.Business.Abstract.Operations;
 using LSP.Business.Concrete;
 using LSP.Core.Security;
 using LSP.Core.Utilities.Interceptors;

@@ -15,5 +15,5 @@ public class Result : IResult
 
     public bool Success { get; }
     public string Message { get; set; }
-    public string MessageCode { get; }
+    public string MessageCode { get; set; }
 }

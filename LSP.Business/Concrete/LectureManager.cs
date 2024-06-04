@@ -13,12 +13,10 @@ namespace LSP.Business.Concrete
     {
         private readonly ILectureDal _lectureDal;
         private readonly IDepartmentService _departmentService;
-        private readonly IFacultyService _facultyService;
 
-        public LectureManager(ILectureDal lectureDal, IFacultyService facultyService, IDepartmentService departmentService)
+        public LectureManager(ILectureDal lectureDal, IDepartmentService departmentService)
         {
             _lectureDal = lectureDal;
-            _facultyService = facultyService;
             _departmentService = departmentService;
         }
 

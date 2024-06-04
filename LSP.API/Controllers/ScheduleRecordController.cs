@@ -7,6 +7,7 @@ using LSP.Core.Result;
 using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.DTO.ScheduleRecord;
+using LSP.Entity.Enum.ScheduleRecord;
 
 namespace LSP.API.Controllers
 {
@@ -52,7 +53,7 @@ namespace LSP.API.Controllers
         }
 
         [SwaggerOperation(Summary = "Get ScheduleRecord By Id", Description = "It gets the ScheduleRecord by id")]
-        [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(SuccessDataResult<ScheduleRecord>), (int)HttpStatusCode.OK)]
         [HttpGet]
         [Route("{id}")]
         public IActionResult GetById([Required][FromRoute] short id)
@@ -61,12 +62,19 @@ namespace LSP.API.Controllers
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
-        [SwaggerOperation(Summary = "Get List of Schedule Record", Description = "It gets the list of Schedule Record")]
-        [ProducesResponseType(typeof(SuccessDataResult<bool>), (int)HttpStatusCode.OK)]
+        [SwaggerOperation(Summary = "Get List of Schedule Records", Description = "It gets the list of Schedule Records")]
+        [ProducesResponseType(typeof(SuccessDataResult<List<ScheduleRecordDto>>), (int)HttpStatusCode.OK)]
         [HttpGet]
         public IActionResult GetList()
         {
-            var result = _scheduleRecordService.GetList();
+            var result = new ServiceResult<List<ScheduleRecordDto>>
+            {
+                HttpStatusCode = (short)HttpStatusCode.OK,
+                Result = new SuccessDataResult<List<ScheduleRecordDto>>(
+                        new List<ScheduleRecordDto>() { new() { Id = 1, ClassroomName = "ClassroomName", LectureName = "LectureName", Day = DaysEnum.Monday, StartHour = 1, EndHour = 1 } },
+                        "Operation Completed Successfully",
+                        "success")
+            };//_scheduleRecordService.GetList();
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 
