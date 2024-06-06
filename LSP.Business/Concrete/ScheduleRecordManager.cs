@@ -42,19 +42,7 @@ namespace LSP.Business.Concrete
                 };
 
             var scheduleRecord = _scheduleRecordDal.Get(record =>
-                record.ClassroomId == request.ClassroomId &&
-                record.Day == request.Day &&
-                (
-                    (record.StartHour == request.StartHour && record.EndHour == request.EndHour) ||
-                    (record.StartHour == request.StartHour && record.EndHour < request.EndHour) ||
-                    (record.StartHour == request.StartHour && record.EndHour > request.EndHour) ||
-                    (record.StartHour < request.StartHour && record.EndHour == request.EndHour) ||
-                    (record.StartHour < request.StartHour && record.EndHour > request.EndHour) ||
-                    (record.StartHour < request.StartHour && record.EndHour < request.EndHour) ||
-                    (record.StartHour > request.StartHour && record.EndHour == request.EndHour) ||
-                    (record.StartHour > request.StartHour && record.EndHour > request.EndHour) ||
-                    (record.StartHour > request.StartHour && record.EndHour < request.EndHour)
-                )
+                AvaibilityCondition(request.Day, request.StartHour, request.EndHour, record)
             );
 
             if (scheduleRecord is not null)
@@ -182,13 +170,13 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<List<ScheduleRecord>> GetList()
         {
-            var ScheduleRecords = _scheduleRecordDal.GetList();
-            if (ScheduleRecords is not null)
+            var scheduleRecords = _scheduleRecordDal.GetList();
+            if (scheduleRecords is not null)
             {
                 return new ServiceResult<List<ScheduleRecord>>
                 {
                     HttpStatusCode = (short)HttpStatusCode.OK,
-                    Result = new SuccessDataResult<List<ScheduleRecord>>(ScheduleRecords.ToList(),
+                    Result = new SuccessDataResult<List<ScheduleRecord>>(scheduleRecords.ToList(),
                         Messages.success,
                         Messages.success_code)
                 };
@@ -226,22 +214,20 @@ namespace LSP.Business.Concrete
             };
         }
 
-        public bool TimeControl(List<ScheduleRecord> list, DaysEnum day, byte startHour, byte endHour)
+        public bool ScheduleAvailabilityControl(short classroomId, DaysEnum day, byte reqStartHour, byte reqEndHour)
         {
-            return list.Exists(record =>
-                record.Day == day &&
+            var scheduleRecordListByClassroom = _scheduleRecordDal.GetList(sr => sr.ClassroomId == classroomId).ToList();
+            return scheduleRecordListByClassroom.Exists(record => AvaibilityCondition(day, reqStartHour, reqEndHour, record));
+        }
+
+        private static bool AvaibilityCondition(DaysEnum requestDay, byte requestStartHour, byte requestEndHour, ScheduleRecord record)
+        {
+            return record.Day == requestDay &&
                 (
-                    (record.StartHour == startHour && record.EndHour == endHour) ||
-                    (record.StartHour == startHour && record.EndHour < endHour) ||
-                    (record.StartHour == startHour && record.EndHour > endHour) ||
-                    (record.StartHour < startHour && record.EndHour == endHour) ||
-                    (record.StartHour < startHour && record.EndHour > endHour) ||
-                    (record.StartHour < startHour && record.EndHour < endHour) ||
-                    (record.StartHour > startHour && record.EndHour == endHour) ||
-                    (record.StartHour > startHour && record.EndHour > endHour) ||
-                    (record.StartHour > startHour && record.EndHour < endHour)
-                )
-            );
+                    (requestStartHour < record.StartHour && (requestEndHour == record.EndHour || requestEndHour > record.EndHour)) ||
+                    (requestStartHour == record.StartHour) ||
+                    (requestStartHour > record.StartHour && record.EndHour > requestStartHour)
+                );
         }
     }
 }

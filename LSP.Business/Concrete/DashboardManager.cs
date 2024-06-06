@@ -92,86 +92,98 @@ namespace LSP.Business.Concrete
 
         public ServiceResult<OpenCloseClassResponseDto> AvailabilityOfClasses(OpenCloseClassRequestDto request)
         {
-            // if (request.StartHour == request.EndHour)
-            //     return new ServiceResult<OpenCloseClassResponseDto>
-            //     {
-            //         HttpStatusCode = (short)HttpStatusCode.NotFound,
-            //         Result = new ErrorDataResult<OpenCloseClassResponseDto>(null,
-            //             Messages.same_start_end_hour,
-            //             Messages.same_start_end_hour)
-            //     };
+            if (request.StartHour == request.EndHour)
+                return new ServiceResult<OpenCloseClassResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<OpenCloseClassResponseDto>(null,
+                        Messages.same_start_end_hour,
+                        Messages.same_start_end_hour)
+                };
 
-            // if (request.StartHour > request.EndHour)
-            //     return new ServiceResult<OpenCloseClassResponseDto>
-            //     {
-            //         HttpStatusCode = (short)HttpStatusCode.NotFound,
-            //         Result = new ErrorDataResult<OpenCloseClassResponseDto>(
-            //             null,
-            //             Messages.start_hour_must_smaller,
-            //             Messages.start_hour_must_smaller)
-            //     };
+            if (request.StartHour > request.EndHour)
+                return new ServiceResult<OpenCloseClassResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<OpenCloseClassResponseDto>(
+                        null,
+                        Messages.start_hour_must_smaller,
+                        Messages.start_hour_must_smaller)
+                };
 
-            // var classrooms = _classroomService.GetList().Result;
+            var classrooms = _classroomService.GetList().Result;
 
-            // if (!classrooms.Success)
-            //     return new ServiceResult<OpenCloseClassResponseDto>
-            //     {
-            //         HttpStatusCode = (short)HttpStatusCode.NotFound,
-            //         Result = new ErrorDataResult<OpenCloseClassResponseDto>(null,
-            //             Messages.classroom_not_found,
-            //             Messages.classroom_not_found)
-            //     };
+            if (!classrooms.Success)
+                return new ServiceResult<OpenCloseClassResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    Result = new ErrorDataResult<OpenCloseClassResponseDto>(null,
+                        Messages.classroom_not_found,
+                        Messages.classroom_not_found)
+                };
 
-            // var scheduleRecords = _scheduleRecordService.GetListByClassroomIds(classrooms.Data!.Select(c => c.Id).ToList()).Result;
-            // if (!scheduleRecords.Success)
-            // {
-            //     var openCloseClassDto = new OpenCloseClassResponseDto
-            //     {
-            //         NumberOfAvailables = classrooms.Data!.Count,
-            //         NumberOfUnavailables = 0
-            //     };
-
-            //     return new ServiceResult<OpenCloseClassResponseDto>
-            //     {
-            //         HttpStatusCode = (short)HttpStatusCode.OK,
-            //         Result = new SuccessDataResult<OpenCloseClassResponseDto>(
-            //             openCloseClassDto,
-            //             Messages.success,
-            //             Messages.success)
-            //     };
-            // }
-            // else
-            // {
-            //     var unavailableClassrooms =
-
-            //     var openCloseClassDto = new OpenCloseClassResponseDto
-            //     {
-            //         NumberOfAvailables = classrooms.Data!.Count - scheduleRecords.Result.Data!.Count,
-            //         NumberOfUnavailables = scheduleRecords.Result.Data!.Count
-            //     };
-
-            //     return new ServiceResult<OpenCloseClassResponseDto>
-            //     {
-            //         HttpStatusCode = (short)HttpStatusCode.OK,
-            //         Result = new SuccessDataResult<OpenCloseClassResponseDto>(
-            //             openCloseClassDto,
-            //             Messages.success,
-            //             Messages.success)
-            //     };
-            // }
-
-            return new ServiceResult<OpenCloseClassResponseDto>
+            var scheduleRecords = _scheduleRecordService.GetListByClassroomIds(classrooms.Data!.Select(c => c.Id).ToList()).Result;
+            if (!scheduleRecords.Success)
             {
-                HttpStatusCode = (short)HttpStatusCode.OK,
-                Result = new SuccessDataResult<OpenCloseClassResponseDto>(
-                    new OpenCloseClassResponseDto()
-                    {
-                        NumberOfAvailables = 24,
-                        NumberOfUnavailables = 25
-                    },
-                    Messages.success,
-                    Messages.success_code)
-            };
+                var openCloseClassDto = new OpenCloseClassResponseDto
+                {
+                    NumberOfAvailables = classrooms.Data!.Count,
+                    NumberOfUnavailables = 0
+                };
+
+                return new ServiceResult<OpenCloseClassResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.OK,
+                    Result = new SuccessDataResult<OpenCloseClassResponseDto>(
+                        openCloseClassDto,
+                        Messages.success,
+                        Messages.success)
+                };
+            }
+            else
+            {
+                short numberOfUnavailableClassroom = 0;
+
+                var scheduledClassroomIds = scheduleRecords.Data!.Select(sr => sr.ClassroomId).ToList();
+                var classroomIds = classrooms.Data!.Select(c => c.Id).ToList();
+                for (int i = 0; i < classroomIds.Count; i++)
+                {
+                    var classroomId = classroomIds[i];
+                    var classroom = classrooms.Data!.FirstOrDefault(c => c.Id == classroomId);
+                    if (classroom is not null)
+                        if (scheduledClassroomIds.Contains(classroomIds[i]))
+                            if (_scheduleRecordService.ScheduleAvailabilityControl(classroomIds[i], request.Day, request.StartHour, request.EndHour))
+                                numberOfUnavailableClassroom++;
+                }
+
+                var openCloseClassDto = new OpenCloseClassResponseDto
+                {
+                    NumberOfAvailables = classrooms.Data!.Count - numberOfUnavailableClassroom,
+                    NumberOfUnavailables = numberOfUnavailableClassroom
+                };
+
+                return new ServiceResult<OpenCloseClassResponseDto>
+                {
+                    HttpStatusCode = (short)HttpStatusCode.OK,
+                    Result = new SuccessDataResult<OpenCloseClassResponseDto>(
+                        openCloseClassDto,
+                        Messages.success,
+                        Messages.success)
+                };
+            }
+
+            // return new ServiceResult<OpenCloseClassResponseDto>
+            // {
+            //     HttpStatusCode = (short)HttpStatusCode.OK,
+            //     Result = new SuccessDataResult<OpenCloseClassResponseDto>(
+            //         new OpenCloseClassResponseDto()
+            //         {
+            //             NumberOfAvailables = 24,
+            //             NumberOfUnavailables = 25
+            //         },
+            //         Messages.success,
+            //         Messages.success_code)
+            // };
         }
 
         public class OpenCloseClassRequestDto

@@ -8,6 +8,7 @@ using LSP.Entity.Concrete;
 using System.ComponentModel.DataAnnotations;
 using LSP.Entity.DTO.ScheduleRecord;
 using LSP.Entity.Enum.ScheduleRecord;
+using LSP.Business.Abstract.Operations;
 
 namespace LSP.API.Controllers
 {
@@ -18,10 +19,12 @@ namespace LSP.API.Controllers
     public class ScheduleRecordController : ControllerBase
     {
         private readonly IScheduleRecordService _scheduleRecordService;
+        private readonly IScheduleRecordOperationService _scheduleRecordOperationService;
 
-        public ScheduleRecordController(IScheduleRecordService scheduleRecordService)
+        public ScheduleRecordController(IScheduleRecordService scheduleRecordService, IScheduleRecordOperationService scheduleRecordOperationService)
         {
             _scheduleRecordService = scheduleRecordService;
+            _scheduleRecordOperationService = scheduleRecordOperationService;
         }
 
         [SwaggerOperation(Summary = "Add Schedule Record", Description = "It Adds Schedule Record")]
@@ -67,14 +70,7 @@ namespace LSP.API.Controllers
         [HttpGet]
         public IActionResult GetList()
         {
-            var result = new ServiceResult<List<ScheduleRecordDto>>
-            {
-                HttpStatusCode = (short)HttpStatusCode.OK,
-                Result = new SuccessDataResult<List<ScheduleRecordDto>>(
-                        new List<ScheduleRecordDto>() { new() { Id = 1, ClassroomName = "ClassroomName", LectureName = "LectureName", Day = DaysEnum.Monday, StartHour = 1, EndHour = 1 } },
-                        "Operation Completed Successfully",
-                        "success")
-            };//_scheduleRecordService.GetList();
+            var result = _scheduleRecordOperationService.GetList();
             return StatusCode(result.HttpStatusCode, result.Result);
         }
 

@@ -16,6 +16,6 @@ namespace LSP.Business.Abstract
         ServiceResult<List<ScheduleRecord>> GetListByClassroomIds(List<short> classroomId);
         // ServiceResult<List<GetScheduleRecordListByStatusDto>> GetListByStatus(ScheduleRecordStatusEnum status);
         ServiceResult<ScheduleRecord> Get(Expression<Func<ScheduleRecord, bool>> filter);
-        bool TimeControl(List<ScheduleRecord> list, DaysEnum day, byte startHour, byte endHour);
+        bool ScheduleAvailabilityControl(short classroomId, DaysEnum day, byte startHour, byte endHour);
     }
 }

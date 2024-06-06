@@ -364,10 +364,16 @@ namespace LSP.Business.Concrete
 
         private void EliminateMatchedClasses(GetAvailableClassroomRequestDto request, List<Classroom> classrooms, List<ScheduleRecord> scheduleRecords)
         {
-            for (int i = 0; i < scheduleRecords.Count; i++)
+            var scheduledClassroomIds = scheduleRecords.Select(sr => sr.ClassroomId).ToList();
+            var classroomIds = classrooms.Select(c => c.Id).ToList();
+            for (int i = 0; i < classroomIds.Count; i++)
             {
-                if (_scheduleRecordService.TimeControl(scheduleRecords, request.Day, request.StartHour, request.EndHour))
-                    classrooms.Remove(classrooms[i]);
+                var classroomId = classroomIds[i];
+                var classroom = classrooms.FirstOrDefault(c => c.Id == classroomId);
+                if (classroom is not null)
+                    if (scheduledClassroomIds.Contains(classroomIds[i]))
+                        if (_scheduleRecordService.ScheduleAvailabilityControl(classroomIds[i], request.Day, request.StartHour, request.EndHour))
+                            classrooms.Remove(classroom);
             }
         }
 
