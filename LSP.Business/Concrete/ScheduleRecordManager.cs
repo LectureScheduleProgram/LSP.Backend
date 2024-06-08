@@ -24,7 +24,7 @@ namespace LSP.Business.Concrete
             if (request.StartHour == request.EndHour)
                 return new ServiceResult<bool>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
                     Result = new ErrorDataResult<bool>(
                         false,
                         Messages.same_start_end_hour,
@@ -34,18 +34,16 @@ namespace LSP.Business.Concrete
             if (request.StartHour > request.EndHour)
                 return new ServiceResult<bool>
                 {
-                    HttpStatusCode = (short)HttpStatusCode.NotFound,
+                    HttpStatusCode = (short)HttpStatusCode.BadRequest,
                     Result = new ErrorDataResult<bool>(
                         false,
                         Messages.start_hour_must_smaller,
                         Messages.start_hour_must_smaller)
                 };
 
-            var scheduleRecord = _scheduleRecordDal.Get(record =>
-                AvaibilityCondition(request.Day, request.StartHour, request.EndHour, record)
-            );
+            var scheduleRecordExists = ScheduleAvailabilityControl(request.ClassroomId, request.Day, request.StartHour, request.EndHour);
 
-            if (scheduleRecord is not null)
+            if (scheduleRecordExists is true)
             {
                 return new ServiceResult<bool>
                 {
